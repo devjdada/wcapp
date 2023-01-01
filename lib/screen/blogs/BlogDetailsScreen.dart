@@ -4,22 +4,18 @@ class BlogDetailsScreen extends StatefulWidget {
   BlogDetailsScreen(
       {Key? key,
       // required this.by,
-      required this.summary,
       required this.img,
       required this.id,
       required this.date,
       required this.title,
-      required this.postedOn,
       required this.doc})
       : super(key: key);
 
   // final String by;
-  final String summary;
   final String doc;
   final int id;
   final String img;
   final String date;
-  final String postedOn;
   final String title;
 
   @override
@@ -46,8 +42,12 @@ class _BlogDetailsScreenState extends State<BlogDetailsScreen> {
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
                     title: Text(widget.title.toString(), textScaleFactor: 1),
+                    centerTitle: true,
+                    titlePadding: const EdgeInsets.only(bottom: 10.0),
+                    collapseMode: CollapseMode.parallax,
+                    // title: Text(widget.title),
                     background: Hero(
-                      tag: 'tsyBanner${widget.id}',
+                      tag: 'blogBanner${widget.id}',
                       child: Image.network(
                         widget.img,
                         fit: BoxFit.fill,
@@ -71,12 +71,12 @@ class _BlogDetailsScreenState extends State<BlogDetailsScreen> {
                           child: Text(
                             widget.title,
                             style: const TextStyle(
-                                fontSize: 22.0,
+                                fontSize: 18.0,
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Roboto-Regular'),
                           ),
                         ),
-                        Text(widget.doc)
+                        Text(widget.doc),
                       ],
                     ),
                   ),

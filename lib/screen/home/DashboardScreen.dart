@@ -5,17 +5,22 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:winners/api/BlogApi.dart';
 import 'package:winners/api/GalleryApi.dart';
 import 'package:winners/api/TestimonyApi.dart';
 import 'package:winners/api/YtApi.dart';
+import 'package:winners/schema/BlogsSchema.dart';
 import 'package:winners/schema/GallerySchema.dart';
 import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/TestimonySchema.dart';
 import 'package:winners/schema/YtSchema.dart';
 import 'package:winners/screen/Auth/LoginScreen.dart';
 import 'package:winners/screen/blogs/BlogsScreen.dart';
+import 'package:winners/screen/home/include/BlogDash.dart';
+import 'package:winners/screen/home/include/TestimonyDash.dart';
 import 'package:winners/screen/podcast/mp3_player.dart';
 import 'package:winners/screen/testimony/TestimoniesScreen.dart';
+import 'package:winners/screen/testimony/TestimonyDetailScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/data/AppStore.dart';
 import 'package:winners/shared/data/AppString.dart';
@@ -38,10 +43,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool loadingYTPre = false;
   late LogUserSchema logUser;
   late String userPhone;
-  late TestimonySchema testimonies;
-  late GallerySchema galleries;
-
-  bool loadGallery = false;
 
   bool loadingUserData = false;
   bool isUserLogedIn = false;
@@ -55,9 +56,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    getTestimonies();
+
     getLiveYT();
-    gallery();
+
     // _intro();
     initUserData();
   }
@@ -100,30 +101,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       videoResult = video;
       loadingYTPre = true;
     });
-  }
-
-  Future gallery() async {
-    try {
-      var gallist = await GalleryApi().getGallery();
-      setState(() {
-        galleries = gallist; //
-        loadGallery = true;
-      });
-    } on Exception catch (err) {
-      print(err);
-    }
-  }
-
-  Future getTestimonies() async {
-    try {
-      var tsyList = await TestimonyApi().getTestimony();
-      setState(() {
-        testimonies = tsyList; //
-        loadingTsy = true;
-      });
-    } on Exception catch (err) {
-      print(err);
-    }
   }
 
   @override
@@ -518,128 +495,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const SizedBox(
                         height: 15.0,
                       ),
-                      Row(
-                        children: <Widget>[
-                          const Expanded(
-                            child: Text(
-                              "Testimonies",
-                              style: TextStyle(fontSize: 16.0),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              child: const Text(
-                                "View All",
-                                style: TextStyle(color: Color(0XFF2BD093)),
-                                textAlign: TextAlign.end,
-                              ),
-                              onTap: () {
-                                Get.to(const TestimoniesScreen());
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      loadingTsy == false
-                          ? const Center(
-                              child: Text("No Testimonies Found"),
-                            )
-                          : SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                  children: testimonies.data!.map((e) {
-                                return InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                      margin:
-                                          const EdgeInsets.only(right: 10.0),
-                                      width: width * 0.56,
-                                      height: height * 0.18,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                e.image.toString()),
-                                            fit: BoxFit.cover),
-                                      ),
-                                      child: Positioned(
-                                        bottom: 0.0,
-                                        left: 0.0,
-                                        right: 0.0,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            gradient: const LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Color.fromARGB(
-                                                    90, 88, 221, 172),
-                                                Color.fromARGB(
-                                                    90, 126, 238, 197),
-                                              ],
-                                            ),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 5.0),
-                                          child: Text(
-                                            e.name.toString(),
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14.0),
-                                          ),
-                                        ),
-                                      )),
-                                );
-                              }).toList()),
-                            ),
-                      Row(
-                        children: <Widget>[
-                          const Expanded(
-                              child: Text("Blogs",
-                                  style: TextStyle(fontSize: 16.0))),
-                          Expanded(
-                              child: InkWell(
-                            child: const Text(
-                              "View All",
-                              style: TextStyle(color: Color(0XFF2BD093)),
-                              textAlign: TextAlign.end,
-                            ),
-                            onTap: () {
-                              Get.to(BlogsScreen());
-                            },
-                          ))
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      loadGallery == false
-                          ? const Center(
-                              child: Text("No Gallery Found"),
-                            )
-                          : SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                  children: galleries.data!.map((e) {
-                                return Container(
-                                  margin: const EdgeInsets.only(right: 10.0),
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    image: DecorationImage(
-                                        image: NetworkImage(e.image.toString()),
-                                        fit: BoxFit.cover),
-                                  ),
-                                );
-                              }).toList()),
-                            ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
+                      const TestimonyDash(),
+                      const BlogDash(),
                       Row(
                         children: <Widget>[
                           Expanded(

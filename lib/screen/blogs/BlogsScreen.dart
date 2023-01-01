@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:winners/api/BlogApi.dart';
 import 'package:winners/schema/BlogsSchema.dart';
+import 'package:winners/screen/blogs/BlogDetailsScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/loader.dart';
 
@@ -24,6 +26,8 @@ class _BlogsScreenState extends State<BlogsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
         drawer: const Drawer(
           child: AppDrawer(),
@@ -71,70 +75,57 @@ class _BlogsScreenState extends State<BlogsScreen> {
                             : blogs.data!
                                 .map((blg) => Padding(
                                       padding: const EdgeInsets.all(0.0),
-                                      child: Card(
-                                        child: Center(
-                                          child: Column(
-                                            children: <Widget>[
-                                              InkWell(
-                                                child: Column(
-                                                  children: [
-                                                    // ignore: unnecessary_null_comparison
-                                                    blg.image != null
-                                                        ? Hero(
-                                                            tag:
-                                                                'blgBanner${blg.id}',
-                                                            child: Image(
-                                                              image: NetworkImage(blg
-                                                                  .image
+                                      child: Column(
+                                        children: <Widget>[
+                                          InkWell(
+                                            child: Column(
+                                              children: [
+                                                // ignore: unnecessary_null_comparison
+                                                blg.image != null
+                                                    ? Hero(
+                                                        tag:
+                                                            'blogBanner${blg.id}',
+                                                        child: Image(
+                                                          image: NetworkImage(
+                                                              blg.image
                                                                   .toString()),
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.9,
-                                                              height: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.31,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          )
-                                                        : Container(),
+                                                          width: width * 0.9,
+                                                          height: width * 0.31,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      )
+                                                    : Container(),
 
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 6.0),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            blg.title
-                                                                .toString(),
-                                                            style: const TextStyle(
-                                                                fontSize: 15.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    'Roboto-Regular'),
-                                                            maxLines: 3,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                          Text(blg.content
-                                                              .toString())
-                                                        ],
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      blg.title.toString(),
+                                                      style: const TextStyle(
+                                                        fontSize: 14.0,
                                                       ),
-                                                    ),
+                                                      maxLines: 3,
+                                                      softWrap: true,
+                                                      overflow:
+                                                          TextOverflow.fade,
+                                                    )
                                                   ],
                                                 ),
-                                                onTap: () {},
-                                              ),
-                                            ],
+                                              ],
+                                            ),
+                                            onTap: () {
+                                              Get.to(
+                                                BlogDetailsScreen(
+                                                  img: blg.image.toString(),
+                                                  id: blg.id!.toInt(),
+                                                  date:
+                                                      blg.createdAt.toString(),
+                                                  title: blg.title.toString(),
+                                                  doc: blg.content.toString(),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ))
                                 .toList()),
