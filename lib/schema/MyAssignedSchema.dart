@@ -7,7 +7,7 @@ class MyAssignedSchema {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
@@ -50,20 +50,20 @@ class Data {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     contact =
-        json['contact'] != null ? new Contact.fromJson(json['contact']) : null;
+        json['contact'] != null ? Contact.fromJson(json['contact']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['station_id'] = this.stationId;
-    data['type'] = this.type;
-    data['assigned_to'] = this.assignedTo;
-    data['contact_id'] = this.contactId;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.contact != null) {
-      data['contact'] = this.contact!.toJson();
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['type'] = type;
+    data['assigned_to'] = assignedTo;
+    data['contact_id'] = contactId;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (contact != null) {
+      data['contact'] = contact!.toJson();
     }
     return data;
   }
@@ -144,28 +144,28 @@ class Contact {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['station_id'] = this.stationId;
-    data['soul_winner'] = this.soulWinner;
-    data['surname'] = this.surname;
-    data['firstname'] = this.firstname;
-    data['location'] = this.location;
-    data['phone'] = this.phone;
-    data['marital'] = this.marital;
-    data['gender'] = this.gender;
-    data['ocupation'] = this.ocupation;
-    data['address'] = this.address;
-    data['email'] = this.email;
-    data['bus_stop'] = this.busStop;
-    data['born_again'] = this.bornAgain;
-    data['born_again_on'] = this.bornAgainOn;
-    data['prayer_point'] = this.prayerPoint;
-    data['type'] = this.type;
-    data['fc'] = this.fc;
-    data['wb'] = this.wb;
-    data['exblish'] = this.exblish;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['soul_winner'] = soulWinner;
+    data['surname'] = surname;
+    data['firstname'] = firstname;
+    data['location'] = location;
+    data['phone'] = phone;
+    data['marital'] = marital;
+    data['gender'] = gender;
+    data['ocupation'] = ocupation;
+    data['address'] = address;
+    data['email'] = email;
+    data['bus_stop'] = busStop;
+    data['born_again'] = bornAgain;
+    data['born_again_on'] = bornAgainOn;
+    data['prayer_point'] = prayerPoint;
+    data['type'] = type;
+    data['fc'] = fc;
+    data['wb'] = wb;
+    data['exblish'] = exblish;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

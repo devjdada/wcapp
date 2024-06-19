@@ -4,7 +4,7 @@ import 'package:winners/service/HttpService.dart';
 
 class UserApi {
   getUser(userID) async {
-    Response response = await HttpService().get("users/$userID");
+    Response response = await HttpService().get("user/$userID");
     return UserSchema.fromJson(response.data);
   }
 }

@@ -1,15 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_screen_onboarding_flutter/introduction.dart';
 import 'package:intro_screen_onboarding_flutter/introscreenonboarding.dart';
+import 'package:winners/api/AuthApi.dart';
 import 'package:winners/screen/Auth/LoginScreen.dart';
+import 'package:winners/screen/home/DashboardScreen.dart';
+import 'package:winners/shared/data/AppStore.dart';
 import 'package:winners/shared/themes.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
+  WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  bool islog = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initUserData();
+  }
+
+  initUserData() async {
+    islog = await AuthApi().isUserLogin();
+    if (islog) {
+      Get.to(const DashboardScreen());
+    }
+  }
+
   final List<Introduction> list = [
     Introduction(
-      title: 'Fashion Store',
-      subTitle: 'Browse the menu and order directly from the application',
+      title: 'Proverbs 11:30',
+      subTitle: 'he who wins souls is wise.',
       imageUrl: 'assets/images/onboarding3.png',
+    ),
+    Introduction(
+      title: 'Delivery',
+      subTitle: 'Your order will be immediately collected and',
+      imageUrl: 'assets/images/onboarding2.png',
     ),
     Introduction(
       title: 'Delivery',
@@ -21,13 +52,17 @@ class WelcomeScreen extends StatelessWidget {
       subTitle: 'Pick up delivery at your door and enjoy groceries',
       imageUrl: 'assets/images/onboarding1.png',
     ),
+    Introduction(
+      title: 'Receive Second',
+      subTitle: 'Pick up delivery at your door and enjoy groceries',
+      imageUrl: 'assets/images/onboarding1.png',
+    ),
   ];
 
-  WelcomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return IntroScreenOnboarding(
-      backgroudColor: const Color(0xFFf9f9f9),
+      backgroudColor: Theme.of(context).colorScheme.inversePrimary,
       foregroundColor: primary,
       introductionList: list,
       onTapSkipButton: () => Navigator.push(

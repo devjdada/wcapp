@@ -29,12 +29,12 @@ class AppStore {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-  static Future<String?> getUserProfile() async {
+  static Future<String?> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(AppString.userDB);
   }
 
-  static Future<bool> setUserProfile(LogUserSchema user) async {
+  static Future<bool> setUserData(LogUserSchema user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userProfileJson = json.encode(user);
     return prefs.setString(AppString.userDB, userProfileJson);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 // ignore: unused_import
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ class AuthApi {
       var logUser = LogUserSchema.fromJson(res.data);
       if (logUser.apiToken != null) {
         AppStore.setUserLoggedIn(true);
-        AppStore.setUserProfile(logUser);
+        AppStore.setUserData(logUser);
         AppStore.setUserToken(logUser.apiToken);
         return true;
       }
@@ -33,7 +35,7 @@ class AuthApi {
       var logUser = LogUserSchema.fromJson(res.data);
       if (logUser.apiToken != null) {
         AppStore.setUserLoggedIn(true);
-        AppStore.setUserProfile(logUser);
+        AppStore.setUserData(logUser);
         AppStore.setUserToken(logUser.apiToken);
 
         return true;
@@ -42,5 +44,24 @@ class AuthApi {
       print(e);
       return false;
     }
+  }
+
+  logUser() async {
+    var userRef = await AppStore.getUserData();
+    try {
+      var decodeUser = LogUserSchema.fromJson(json.decode(userRef!));
+      return decodeUser;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  isUserLogin() async {
+    return await AppStore.isUserLoggedIn() ?? false;
+  }
+
+  logOut() async {
+    await AppStore.logOut();
+    return true;
   }
 }

@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:winners/api/AuthApi.dart';
 import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/screen/Assigned/MyAssignedContact.dart';
+import 'package:winners/screen/Auth/LoginScreen.dart';
 import 'package:winners/screen/contact/ContactReportScreen.dart';
 import 'package:winners/screen/contact/MyContactScreen.dart';
 import 'package:winners/screen/home/DashboardScreen.dart';
+import 'package:winners/screen/homecell/HomecellScreen.dart';
 import 'package:winners/screen/profile/ProfileScreen.dart';
 import 'package:winners/shared/data/AppStore.dart';
 import 'package:winners/shared/data/AppString.dart';
@@ -25,7 +28,7 @@ class _AppDrawerState extends State<AppDrawer> {
   bool loadingUserData = false;
 
   initUserData() async {
-    var userRef = await AppStore.getUserProfile();
+    var userRef = await AppStore.getUserData();
     try {
       var decodeUser = LogUserSchema.fromJson(json.decode(userRef!));
       setState(() {
@@ -38,7 +41,10 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   logOutNow() async {
-    AppStore.logOut();
+    bool logout = await AuthApi().logOut();
+    if (logout) {
+      Get.offAllNamed('/login');
+    }
   }
 
   @override
@@ -254,7 +260,31 @@ class _AppDrawerState extends State<AppDrawer> {
                     color: Colors.white70,
                     size: 24,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            HomecellScreen("${userInfo.user!.stationId}"),
+                        settings: const RouteSettings(
+                            name: 'profile', arguments: [])));
+                  },
+                ),
+                ListTile(
+                  title: const Text(
+                    "LogOut",
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  leading: const Icon(
+                    Icons.lock,
+                    color: Colors.white70,
+                    size: 24,
+                  ),
+                  onTap: () {
+                    logOutNow();
+                  },
                 ),
               ],
             ),

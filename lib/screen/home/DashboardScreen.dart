@@ -51,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   initUserData() async {
-    var userRef = await AppStore.getUserProfile();
+    var userRef = await AppStore.getUserData();
     try {
       var decodeUser = LogUserSchema.fromJson(json.decode(userRef!));
       setState(() {
@@ -524,7 +524,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           : Row(
                               children: <Widget>[
                                 for (int i = 0; i < 3; i++)
-                                  Expanded(
+                                  const Expanded(
                                     child: SizedBox(
                                       height: 100.0,
                                       child: Column(
@@ -619,7 +619,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      loadGallery == false ? Container() : Center(),
+                      loadGallery == false ? Container() : const Center(),
                       const SizedBox(
                         height: 10.0,
                       ),
@@ -789,7 +789,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //     settings: RouteSettings(name: 'intro', arguments: [])));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => DashboardScreen(),
+          builder: (BuildContext context) => const DashboardScreen(),
           settings: RouteSettings(name: 'dashboard', arguments: [])));
     }
   }

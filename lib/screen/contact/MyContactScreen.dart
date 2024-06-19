@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -103,7 +105,7 @@ class _MyContactScreenState extends State<MyContactScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: kPrimary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           title: const Text(
             'Save New Contact',
             style: heading2,
@@ -197,126 +199,136 @@ class _MyContactScreenState extends State<MyContactScreen> {
       ),
       body: loading == false
           ? Center(child: Loader())
-          : CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: const Text(
-                      'Soul Wining',
-                      style: kBodyTextBlack,
-                    ),
-                    background: Image.asset(
-                      'assets/images/soul_wining.jpg',
-                      fit: BoxFit.fill,
-                    ),
-                    centerTitle: true,
-                    stretchModes: const [
-                      StretchMode.zoomBackground,
-                      StretchMode.fadeTitle
-                    ],
+          : MyInvittees == null || MyInvittees.data == null
+              ? const Center(
+                  child: Text(
+                    'No Contact Found',
+                    style: TextStyle(color: kPrimary),
                   ),
-
-                  expandedHeight: 250.0,
-                  stretch: true,
-                  pinned: true,
-                  actions: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        // showSearch(
-                        //     context: context,
-                        //     delegate: SoulSearch(MyInvittees));
-                      },
-                    ),
-                  ],
-                  // flexibleSpace: FlexibleSpaceBar(
-                  //   title: Text('Soul Winning', textScaler: 1),
-                  //   background: Image.asset(
-                  //     'assets/images/soul_wining.jpg',
-                  //     fit: BoxFit.fill,
-                  //   ),
-                  //   stretchModes: <StretchMode>[StretchMode.zoomBackground],
-                  // ),
-                ),
-                SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                  final mySoul = MyInvittees.data![index];
-                  return Slidable(
-                    key: ValueKey(index),
-                    startActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
-                          icon: Icons.edit,
-                          label: 'Report',
-                          onPressed: (BuildContext context) {
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //     builder: (BuildContext context) =>
-                            //         SoulReportScreen(
-                            //           id: "${mySoul.id}",
-                            //           name:
-                            //               "${mySoul.surname} ${mySoul.firstname}",
-                            //           user: widget.user,
-                            //         )));
-                          },
+                )
+              : CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      flexibleSpace: FlexibleSpaceBar(
+                        title: const Text(
+                          'Soul Wining',
+                          style: kBodyText,
                         ),
-                        SlidableAction(
-                          backgroundColor: const Color(0xFF21B7CA),
-                          foregroundColor: Colors.white,
-                          icon: Icons.call,
-                          label: 'Call',
-                          onPressed: (BuildContext context) {
-                            // call("${mySoul.phone}");
+                        background: Image.asset(
+                          'assets/images/soul_wining.jpg',
+                          fit: BoxFit.fill,
+                        ),
+                        centerTitle: false,
+                        stretchModes: const [
+                          StretchMode.zoomBackground,
+                          StretchMode.fadeTitle
+                        ],
+                      ),
+
+                      expandedHeight: 250.0,
+                      stretch: true,
+                      pinned: true,
+                      actions: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                            // showSearch(
+                            //     context: context,
+                            //     delegate: SoulSearch(MyInvittees));
                           },
                         ),
                       ],
+                      // flexibleSpace: FlexibleSpaceBar(
+                      //   title: Text('Soul Winning', textScaler: 1),
+                      //   background: Image.asset(
+                      //     'assets/images/soul_wining.jpg',
+                      //     fit: BoxFit.fill,
+                      //   ),
+                      //   stretchModes: <StretchMode>[StretchMode.zoomBackground],
+                      // ),
                     ),
-                    child: InkWell(
-                      child: ListTile(
-                        leading: Hero(
-                          tag: "contact_${mySoul.id}",
-                          child: const CircleAvatar(
-                              backgroundColor: Colors.redAccent,
-                              child: Text(
-                                'DJ',
-                                // name_to_avatar(
-                                //     "${mySoul.surname} ${mySoul.firstname}"),
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white),
-                              )),
-                        ),
-                        title: Text(
-                          "${mySoul.surname} ${mySoul.firstname}",
-                          style: const TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                        final mySoul = MyInvittees.data![index];
+                        return Slidable(
+                          key: ValueKey(index),
+                          startActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                backgroundColor: const Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.edit,
+                                label: 'Report',
+                                onPressed: (BuildContext context) {
+                                  // Navigator.of(context).push(MaterialPageRoute(
+                                  //     builder: (BuildContext context) =>
+                                  //         SoulReportScreen(
+                                  //           id: "${mySoul.id}",
+                                  //           name:
+                                  //               "${mySoul.surname} ${mySoul.firstname}",
+                                  //           user: widget.user,
+                                  //         )));
+                                },
+                              ),
+                              SlidableAction(
+                                backgroundColor: const Color(0xFF21B7CA),
+                                foregroundColor: Colors.white,
+                                icon: Icons.call,
+                                label: 'Call',
+                                onPressed: (BuildContext context) {
+                                  // call("${mySoul.phone}");
+                                },
+                              ),
+                            ],
                           ),
-                        ),
-                        subtitle: Text("${mySoul.location} ${mySoul.phone}"),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ContactDetailScreen(
-                                    "${mySoul.id}",
-                                    "${mySoul.firstname} ${mySoul.surname}",
-                                    "${mySoul.phone}"),
-                            settings: const RouteSettings(
-                                name: 'Soul Wininng View', arguments: []),
+                          child: InkWell(
+                            child: ListTile(
+                              leading: Hero(
+                                tag: "contact_${mySoul.id}",
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.redAccent,
+                                    child: Text(
+                                      mySoul.firstname![0].toUpperCase(),
+                                      // name_to_avatar(
+                                      //     "${mySoul.surname} ${mySoul.firstname}"),
+                                      style: const TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white),
+                                    )),
+                              ),
+                              title: Text(
+                                "${mySoul.surname} ${mySoul.firstname}",
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              subtitle:
+                                  Text("${mySoul.location} ${mySoul.phone}"),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ContactDetailScreen(
+                                          "${mySoul.id}",
+                                          "${mySoul.firstname} ${mySoul.surname}",
+                                          "${mySoul.phone}"),
+                                  settings: const RouteSettings(
+                                      name: 'Soul Wininng View', arguments: []),
+                                ),
+                              );
+                            },
                           ),
                         );
-                      },
+                      }, childCount: MyInvittees.data!.length),
                     ),
-                  );
-                }, childCount: MyInvittees.data!.length))
-              ],
-            ),
+                  ],
+                ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {_neverSatisfied()},
         child: const Icon(Icons.person_add, color: Colors.white),

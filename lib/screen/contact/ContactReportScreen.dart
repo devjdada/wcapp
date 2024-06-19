@@ -4,6 +4,7 @@ import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/MyContactReportSchema.dart';
 import 'package:winners/screen/contact/ContactDetalScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
+import 'package:winners/shared/themes.dart';
 
 class ContactReportScreen extends StatefulWidget {
   const ContactReportScreen(this.me, {super.key});
@@ -28,12 +29,10 @@ class _ContactReportScreenState extends State<ContactReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contact Report'),
-        backgroundColor: Colors.blue,
+        title: const Text('Contact Report', style: kBodyText),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       drawer: const AppDrawer(),
       body: FutureBuilder<MyContactReportSchema>(
@@ -62,7 +61,7 @@ class _ContactReportScreenState extends State<ContactReportScreen> {
                           child: CircleAvatar(
                               backgroundColor: Colors.redAccent,
                               child: Text(
-                                "${r.soul!.firstname![0].toUpperCase()}",
+                                r.soul!.firstname![0].toUpperCase(),
                                 style: const TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w700,
@@ -97,8 +96,8 @@ class _ContactReportScreenState extends State<ContactReportScreen> {
                           bottom: 3.0, left: 15.0, right: 15.0),
                       child: Text(
                         r.report.toString(),
-                        style: textTheme.bodyText2!
-                            .copyWith(color: Colors.black, fontSize: 16.0),
+                        style: const TextStyle(
+                            color: Colors.black, fontSize: 16.0),
                       ),
                     ),
                     if (r.prayer != null)
@@ -107,73 +106,121 @@ class _ContactReportScreenState extends State<ContactReportScreen> {
                             bottom: 3.0, left: 15.0, right: 15.0),
                         child: Text(
                           r.prayer.toString(),
-                          style: textTheme.bodyText2!
-                              .copyWith(color: Colors.black, fontSize: 16.0),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 16.0),
                         ),
                       ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            if (r.baptised != null)
-                              Chip(
-                                elevation: 20,
-                                padding: const EdgeInsets.all(5),
-                                backgroundColor: Colors.blueAccent[100],
-                                shadowColor: Colors.black,
-                                label: const Text(
-                                  "Baptised",
-                                  style: TextStyle(fontSize: 12),
-                                ),
+                      padding: const EdgeInsets.only(
+                          bottom: 20.0, top: 4, left: 15, right: 15),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  const Text("Has Attended Our Service | "),
+                                  r.lastService == 0
+                                      ? const Text(
+                                          "NO",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                      : const Text(
+                                          "YES",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                ],
                               ),
-                            if (r.bornAgain != null)
-                              Chip(
-                                elevation: 20,
-                                padding: const EdgeInsets.all(5),
-                                backgroundColor: Colors.greenAccent[100],
-                                shadowColor: Colors.black,
-                                label: const Text(
-                                  "Born Again",
-                                  style: TextStyle(fontSize: 12),
-                                ),
+                              Row(
+                                children: [
+                                  const Text("Baptist in water immersion | "),
+                                  r.baptised == 0
+                                      ? const Text(
+                                          "NO",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                      : const Text(
+                                          "YES",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                ],
                               ),
-                            if (r.foundationClass != null)
-                              Chip(
-                                elevation: 20,
-                                padding: const EdgeInsets.all(5),
-                                backgroundColor: Colors.brown[100],
-                                shadowColor: Colors.black,
-                                label: const Text(
-                                  "Foundation Class",
-                                  style: TextStyle(fontSize: 12),
-                                ),
+                              Row(
+                                children: [
+                                  const Text("Born Again | "),
+                                  r.bornAgain == 0
+                                      ? const Text(
+                                          "NO",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                      : const Text(
+                                          "YES",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                ],
                               ),
-                            if (r.homecell != null)
-                              Chip(
-                                elevation: 20,
-                                padding: const EdgeInsets.all(5),
-                                backgroundColor: Colors.pinkAccent[100],
-                                shadowColor: Colors.black,
-                                label: const Text(
-                                  "Joined WSF",
-                                  style: TextStyle(fontSize: 12),
-                                ),
+                              Row(
+                                children: [
+                                  const Text("Has join the homecell | "),
+                                  r.homecell == 0
+                                      ? const Text(
+                                          "NO",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                      : const Text(
+                                          "YES",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                ],
                               ),
-                            if (r.unit != null)
-                              Chip(
-                                elevation: 20,
-                                padding: const EdgeInsets.all(5),
-                                backgroundColor: Colors.deepPurpleAccent[100],
-                                shadowColor: Colors.black,
-                                label: const Text(
-                                  "Joined Unit",
-                                  style: TextStyle(fontSize: 12),
-                                ),
+                              Row(
+                                children: [
+                                  const Text(
+                                      "Has  join any of  the service unit | "),
+                                  r.unit == 0
+                                      ? const Text(
+                                          "NO",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                      : const Text(
+                                          "YES",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        )
+                                ],
                               ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ],

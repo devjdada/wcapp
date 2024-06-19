@@ -1,22 +1,42 @@
 class ContactDetailSchema {
-  Data? data;
+  Soul? soul;
+  List<Assigned>? assigned;
+  List<Report>? report;
 
-  ContactDetailSchema({this.data});
+  ContactDetailSchema({this.soul, this.assigned, this.report});
 
-  ContactDetailSchema.fromJson(json) {
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+  ContactDetailSchema.fromJson(Map<String, dynamic> json) {
+    soul = json['soul'] != null ? Soul.fromJson(json['soul']) : null;
+    if (json['assigned'] != null) {
+      assigned = <Assigned>[];
+      json['assigned'].forEach((v) {
+        assigned!.add(Assigned.fromJson(v));
+      });
+    }
+    if (json['report'] != null) {
+      report = <Report>[];
+      json['report'].forEach((v) {
+        report!.add(Report.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
+    if (soul != null) {
+      data['soul'] = soul!.toJson();
+    }
+    if (assigned != null) {
+      data['assigned'] = assigned!.map((v) => v.toJson()).toList();
+    }
+    if (report != null) {
+      data['report'] = report!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Data {
+class Soul {
   int? id;
   int? stationId;
   int? soulWinner;
@@ -40,10 +60,8 @@ class Data {
   String? createdAt;
   String? updatedAt;
   Winner? winner;
-  List<Report>? report;
-  List<Assigned>? assigned;
 
-  Data(
+  Soul(
       {this.id,
       this.stationId,
       this.soulWinner,
@@ -66,11 +84,9 @@ class Data {
       this.exblish,
       this.createdAt,
       this.updatedAt,
-      this.winner,
-      this.report,
-      this.assigned});
+      this.winner});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Soul.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     stationId = json['station_id'];
     soulWinner = json['soul_winner'];
@@ -94,52 +110,34 @@ class Data {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     winner = json['winner'] != null ? Winner.fromJson(json['winner']) : null;
-    if (json['report'] != null) {
-      report = <Report>[];
-      json['report'].forEach((v) {
-        report!.add(Report.fromJson(v));
-      });
-    }
-    if (json['assigned'] != null) {
-      assigned = <Assigned>[];
-      json['assigned'].forEach((v) {
-        assigned!.add(Assigned.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['station_id'] = this.stationId;
-    data['soul_winner'] = this.soulWinner;
-    data['surname'] = this.surname;
-    data['firstname'] = this.firstname;
-    data['location'] = this.location;
-    data['phone'] = this.phone;
-    data['marital'] = this.marital;
-    data['gender'] = this.gender;
-    data['ocupation'] = this.ocupation;
-    data['address'] = this.address;
-    data['email'] = this.email;
-    data['bus_stop'] = this.busStop;
-    data['born_again'] = this.bornAgain;
-    data['born_again_on'] = this.bornAgainOn;
-    data['prayer_point'] = this.prayerPoint;
-    data['type'] = this.type;
-    data['fc'] = this.fc;
-    data['wb'] = this.wb;
-    data['exblish'] = this.exblish;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.winner != null) {
-      data['winner'] = this.winner!.toJson();
-    }
-    if (this.report != null) {
-      data['report'] = this.report!.map((v) => v.toJson()).toList();
-    }
-    if (this.assigned != null) {
-      data['assigned'] = this.assigned!.map((v) => v.toJson()).toList();
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['soul_winner'] = soulWinner;
+    data['surname'] = surname;
+    data['firstname'] = firstname;
+    data['location'] = location;
+    data['phone'] = phone;
+    data['marital'] = marital;
+    data['gender'] = gender;
+    data['ocupation'] = ocupation;
+    data['address'] = address;
+    data['email'] = email;
+    data['bus_stop'] = busStop;
+    data['born_again'] = bornAgain;
+    data['born_again_on'] = bornAgainOn;
+    data['prayer_point'] = prayerPoint;
+    data['type'] = type;
+    data['fc'] = fc;
+    data['wb'] = wb;
+    data['exblish'] = exblish;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (winner != null) {
+      data['winner'] = winner!.toJson();
     }
     return data;
   }
@@ -211,25 +209,73 @@ class Winner {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['surname'] = this.surname;
-    data['firstname'] = this.firstname;
-    data['marital'] = this.marital;
-    data['gender'] = this.gender;
-    data['email'] = this.email;
-    data['phone'] = this.phone;
-    data['email_verified_at'] = this.emailVerifiedAt;
-    data['two_factor_confirmed_at'] = this.twoFactorConfirmedAt;
-    data['address'] = this.address;
-    data['dob'] = this.dob;
-    data['status'] = this.status;
-    data['current_team_id'] = this.currentTeamId;
-    data['station_id'] = this.stationId;
-    data['profile_photo_path'] = this.profilePhotoPath;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['profile_photo_url'] = this.profilePhotoUrl;
+    data['id'] = id;
+    data['name'] = name;
+    data['surname'] = surname;
+    data['firstname'] = firstname;
+    data['marital'] = marital;
+    data['gender'] = gender;
+    data['email'] = email;
+    data['phone'] = phone;
+    data['email_verified_at'] = emailVerifiedAt;
+    data['two_factor_confirmed_at'] = twoFactorConfirmedAt;
+    data['address'] = address;
+    data['dob'] = dob;
+    data['status'] = status;
+    data['current_team_id'] = currentTeamId;
+    data['station_id'] = stationId;
+    data['profile_photo_path'] = profilePhotoPath;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['profile_photo_url'] = profilePhotoUrl;
+    return data;
+  }
+}
+
+class Assigned {
+  int? id;
+  int? stationId;
+  String? type;
+  int? assignedTo;
+  int? contactId;
+  String? createdAt;
+  String? updatedAt;
+  Winner? assignTo;
+
+  Assigned(
+      {this.id,
+      this.stationId,
+      this.type,
+      this.assignedTo,
+      this.contactId,
+      this.createdAt,
+      this.updatedAt,
+      this.assignTo});
+
+  Assigned.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    stationId = json['station_id'];
+    type = json['type'];
+    assignedTo = json['assigned_to'];
+    contactId = json['contact_id'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    assignTo =
+        json['assign_to'] != null ? Winner.fromJson(json['assign_to']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['type'] = type;
+    data['assigned_to'] = assignedTo;
+    data['contact_id'] = contactId;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (assignTo != null) {
+      data['assign_to'] = assignTo!.toJson();
+    }
     return data;
   }
 }
@@ -250,6 +296,7 @@ class Report {
   int? bornAgain;
   String? createdAt;
   String? updatedAt;
+  Winner? reportBy;
 
   Report(
       {this.id,
@@ -266,7 +313,8 @@ class Report {
       this.exblish,
       this.bornAgain,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.reportBy});
 
   Report.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -284,66 +332,30 @@ class Report {
     bornAgain = json['born_again'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    reportBy =
+        json['report_by'] != null ? Winner.fromJson(json['report_by']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['station_id'] = this.stationId;
-    data['soul_id'] = this.soulId;
-    data['user_id'] = this.userId;
-    data['report'] = this.report;
-    data['prayer'] = this.prayer;
-    data['homecell'] = this.homecell;
-    data['baptised'] = this.baptised;
-    data['unit'] = this.unit;
-    data['last_service'] = this.lastService;
-    data['foundation_class'] = this.foundationClass;
-    data['exblish'] = this.exblish;
-    data['born_again'] = this.bornAgain;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    return data;
-  }
-}
-
-class Assigned {
-  int? id;
-  int? stationId;
-  String? type;
-  int? assignedTo;
-  int? contactId;
-  String? createdAt;
-  String? updatedAt;
-
-  Assigned(
-      {this.id,
-      this.stationId,
-      this.type,
-      this.assignedTo,
-      this.contactId,
-      this.createdAt,
-      this.updatedAt});
-
-  Assigned.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    stationId = json['station_id'];
-    type = json['type'];
-    assignedTo = json['assigned_to'];
-    contactId = json['contact_id'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['station_id'] = this.stationId;
-    data['type'] = this.type;
-    data['assigned_to'] = this.assignedTo;
-    data['contact_id'] = this.contactId;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['soul_id'] = soulId;
+    data['user_id'] = userId;
+    data['report'] = report;
+    data['prayer'] = prayer;
+    data['homecell'] = homecell;
+    data['baptised'] = baptised;
+    data['unit'] = unit;
+    data['last_service'] = lastService;
+    data['foundation_class'] = foundationClass;
+    data['exblish'] = exblish;
+    data['born_again'] = bornAgain;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (reportBy != null) {
+      data['report_by'] = reportBy!.toJson();
+    }
     return data;
   }
 }

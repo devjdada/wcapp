@@ -1,6 +1,10 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:winners/api/SoulApi.dart';
 import 'package:winners/schema/ContactDetailSchema.dart';
+import 'package:winners/screen/contact/include/SoulDetailAssigned.dart';
+import 'package:winners/screen/contact/include/SoulDetailReport.dart';
 import 'package:winners/shared/loader.dart';
 import 'package:winners/shared/themes.dart';
 
@@ -48,8 +52,19 @@ class _ContactDetailScreenState extends State<ContactDetailScreen>
       ),
     ];
     _pages = [
-      contacts.data!.assigned != null ? Container() : Container(),
-      contacts.data!.report != null ? Container() : Container()
+      contacts.assigned!.isNotEmpty
+          ? SoulDetailAssigned(contacts)
+          : Center(
+              child:
+                  Text('No Follop Memeber', style: TextStyle(color: primary)),
+            ),
+
+      contacts.report!.isNotEmpty
+          ? SoulDetailReport(contacts)
+          : Center(
+              child: Text('No report', style: TextStyle(color: primary)),
+            ),
+
       //SoulProfileAssigned(assigned)
       // SoulReportWidget(invittes),
     ];
@@ -95,7 +110,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen>
           Column(
             children: [
               Text(
-                '${widget.name}',
+                widget.name,
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
               ),
@@ -131,7 +146,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
                 ),
-                child: Text('sms'),
+                child: const Text('sms'),
                 onPressed: () {},
               ),
             ],
@@ -145,7 +160,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    buildSta(context, contacts.data!.report!.length, "Report"),
+                    buildSta(context, contacts.report!.length, "Report"),
                     const SizedBox(height: 24, child: VerticalDivider()),
                     MaterialButton(
                       onPressed: () {},
@@ -155,23 +170,24 @@ class _ContactDetailScreenState extends State<ContactDetailScreen>
                               radius: 24,
                               backgroundColor: primary,
                               child: Text(
-                                contacts.data!.winner!.name![0].toUpperCase(),
+                                contacts.soul!.winner!.name![0]
+                                    .toString()
+                                    .toUpperCase(),
                                 style: const TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white),
                               )),
                           const SizedBox(height: 6),
-                          const Text(
-                            'Soul Winner',
-                            style: TextStyle(color: Colors.grey),
+                          Text(
+                            "${contacts.soul!.winner!.name}",
+                            style: const TextStyle(color: Colors.grey),
                           )
                         ],
                       ),
                     ),
                     const SizedBox(height: 24, child: VerticalDivider()),
-                    buildSta(
-                        context, contacts.data!.assigned!.length, "Assigned"),
+                    buildSta(context, contacts.assigned!.length, "Assigned"),
                   ],
                 ),
           const SizedBox(height: 24),

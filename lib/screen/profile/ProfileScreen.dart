@@ -5,6 +5,8 @@ import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/UserSchema.dart';
 import 'package:winners/screen/profile/include/ProfileBody.dart';
 import 'package:winners/screen/profile/include/ProfileHeader.dart';
+import 'package:winners/shared/AppDrawer.dart';
+import 'package:winners/shared/loader.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen(this.logUser, {super.key});
@@ -29,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     userID = widget.logUser.user!.id!.toInt();
-
     loadUserData();
     super.initState();
   }
@@ -39,7 +40,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       user = response;
       loadingUserInfo = true;
+      if (user.data!.dob == null || user.data!.dob!.isEmpty) {
+        editProfile();
+      }
     });
+  }
+
+  editProfile() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            child: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Edit Your Profile",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -56,6 +91,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     return Scaffold(
+      drawer: const Drawer(
+        child: AppDrawer(),
+      ),
       body: SingleChildScrollView(
         child: Container(
           decoration: linearGradient,
@@ -71,11 +109,128 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.all(24.0),
                 child: ProfileBody(widget.logUser),
               ),
-              // loadingUserInfo
-              //     ? MyProfileShowcase(userResource)
-              //     : Center(
-              //         child: Loader(),
-              //       ),
+              loadingUserInfo
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Card(
+                            elevation: 2,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: linearGradient,
+                                  child: Image.asset(
+                                    'assets/images/ft_church.jpg',
+                                  ),
+                                ),
+                                const Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 12),
+                                    child: Text(
+                                      "Soul Won",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: Text(
+                                    user.data!.souls!.length.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Card(
+                            elevation: 2,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: linearGradient,
+                                  child: Image.asset(
+                                    'assets/images/ft_church.jpg',
+                                  ),
+                                ),
+                                const Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 12),
+                                    child: Text(
+                                      "Contact Assigned to You",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 12.0),
+                                  child: Text(
+                                    user.data!.assigned!.length.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Card(
+                            elevation: 2,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: linearGradient,
+                                  child: Image.asset(
+                                    'assets/images/ft_church.jpg',
+                                  ),
+                                ),
+                                const Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 12),
+                                    child: Text(
+                                      "Reported Contact",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 12.0),
+                                  child: Text(
+                                    user.data!.report!.length.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: Loader(),
+                    ),
             ],
           ),
         ),
@@ -100,7 +255,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           child: const Icon(
-            FontAwesomeIcons.userCog,
+            FontAwesomeIcons.gear,
             color: Colors.white,
             size: 20,
           ),
