@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:winners/api/HomecellApi.dart';
 import 'package:winners/api/UserApi.dart';
+import 'package:winners/schema/HomecellsSchema.dart';
 import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/UserSchema.dart';
+import 'package:winners/screen/profile/JoinUnitScreen.dart';
 import 'package:winners/screen/profile/include/ProfileBody.dart';
 import 'package:winners/screen/profile/include/ProfileHeader.dart';
+import 'package:winners/search/HomecellSearch.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/loader.dart';
+import 'package:winners/shared/themes.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen(this.logUser, {super.key});
@@ -27,11 +33,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool loadingUserData = true;
   bool loadingUserInfo = false;
   late String type;
+  late HomecellsSchema homecells;
+
+  bool _isEditing = false;
+
+  String? _selectedDate;
+  String? _selectedGender;
+  String? _selectedMaritalStatus;
+  final TextEditingController _addressController = TextEditingController();
+
+  final List<String> genders = ['Male', 'Female', 'Other'];
+  final List<String> maritalStatuses = [
+    'Single',
+    'Married',
+    'Divorced',
+    'Widowed'
+  ];
+
+  _editScript() async {
+    setState(() {
+      _isEditing = true;
+    });
+    var data = {
+      'dob': _selectedDate,
+      'marital': _selectedMaritalStatus,
+      'gender': _selectedGender,
+      'address': _addressController.text
+    };
+    if (_selectedDate != null ||
+        _selectedGender != null ||
+        _selectedMaritalStatus != null) {
+      await UserApi().editUser(user.me!.id, data);
+      setState(() {
+        _isEditing = false;
+      });
+      loadUserData();
+    }
+  }
 
   @override
   void initState() {
     userID = widget.logUser.user!.id!.toInt();
     loadUserData();
+    _joinHomecell();
     super.initState();
   }
 
@@ -40,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       user = response;
       loadingUserInfo = true;
-      if (user.data!.dob == null || user.data!.dob!.isEmpty) {
+      if (user.me!.dob == null || user.me!.dob!.isEmpty) {
         editProfile();
       }
     });
@@ -49,27 +93,160 @@ class _ProfileScreenState extends State<ProfileScreen> {
   editProfile() {
     return showDialog(
       context: context,
+      barrierDismissible: false,
+      barrierLabel: "Cancel",
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Edit Your Profile",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
+          elevation: 5,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Edit Your Profile",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 8,
-                )
-              ],
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_today),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: ListTile(
+                          title: const Text('Birthday'),
+                          subtitle: Text(_selectedDate.toString()),
+                          trailing: const Icon(Icons.keyboard_arrow_down),
+                          onTap: () {
+                            showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                            ).then((pickedDate) {
+                              setState(() {
+                                _selectedDate =
+                                    pickedDate.toString().split(' ')[0];
+                              });
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.person),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          value: _selectedGender,
+                          hint: const Text('Select Gender'),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedGender = newValue;
+                            });
+                          },
+                          items: genders
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // Marital Status Dropdown with Icon
+                  Row(
+                    children: [
+                      const Icon(Icons.family_restroom),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          value: _selectedMaritalStatus,
+                          hint: const Text('Select Marital Status'),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedMaritalStatus = newValue;
+                            });
+                          },
+                          items: maritalStatuses
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // Address Text Box with Icon
+                  Row(
+                    children: [
+                      const Icon(Icons.home),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: _addressController,
+                          keyboardType: TextInputType.streetAddress,
+                          maxLines: 4,
+                          decoration: const InputDecoration(
+                            labelText: 'Address',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text(!_isEditing ? 'Update' : "Waiting..."),
+                        onPressed: () {
+                          if (!_isEditing) {
+                            _editScript();
+                            Navigator.of(context).pop();
+                          }
+                          // Navigator.of(context).pop();
+                        },
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -79,6 +256,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     var linearGradient = const BoxDecoration(
       gradient: LinearGradient(
         begin: FractionalOffset.centerRight,
@@ -114,117 +292,180 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          Card(
-                            elevation: 2,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: linearGradient,
-                                  child: Image.asset(
-                                    'assets/images/ft_church.jpg',
-                                  ),
-                                ),
-                                const Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 12),
-                                    child: Text(
-                                      "Soul Won",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: Text(
-                                    user.data!.souls!.length.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          activityStacts('assets/images/soul_wining.jpg',
+                              "Soul Won", user.me!.souls!.length.toString()),
                           const SizedBox(
                             height: 5,
                           ),
-                          Card(
-                            elevation: 2,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: linearGradient,
-                                  child: Image.asset(
-                                    'assets/images/ft_church.jpg',
-                                  ),
-                                ),
-                                const Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 12),
-                                    child: Text(
-                                      "Contact Assigned to You",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12.0),
-                                  child: Text(
-                                    user.data!.assigned!.length.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          activityStacts(
+                              'assets/images/assigned.jpg',
+                              "COntact Assigned",
+                              user.me!.assigned!.length.toString()),
                           const SizedBox(
                             height: 5,
                           ),
+                          activityStacts(
+                              "assets/images/assigned.jpg",
+                              "Reported Contact",
+                              user.me!.report!.length.toString()),
+                          const SizedBox(
+                            height: 4,
+                          ),
                           Card(
-                            elevation: 2,
+                            margin: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+                            elevation: 10,
+                            child: Center(
+                              child: user.homecell == null
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          showSearch(
+                                            context: context,
+                                            delegate: HomecellSearch(homecells),
+                                          );
+                                        },
+                                        child: const Center(
+                                          child: Column(
+                                            children: [
+                                              Icon(
+                                                Icons.add,
+                                                size: 40,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                "Join Homecell",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              user.homecell!.title.toString(),
+                                              style: heading3,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.location_on,
+                                                  color: Colors.red,
+                                                ),
+                                                Text(
+                                                  user.homecell!.address
+                                                      .toString(),
+                                                  style: heading6,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Center(
+                                                    child: Text(
+                                                        user.homecell!.province
+                                                                ?.title ??
+                                                            "",
+                                                        style: heading6),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Center(
+                                                    child: Text(
+                                                      user.homecell!.district
+                                                              ?.title ??
+                                                          "",
+                                                      style: heading6,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: linearGradient,
-                                  child: Image.asset(
-                                    'assets/images/ft_church.jpg',
-                                  ),
+                                Row(
+                                  children: user.units!
+                                      .map(
+                                        (e) => SizedBox(
+                                          width: screenWidth * 0.7,
+                                          height: screenWidth * 0.35,
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    e.title.toString(),
+                                                    style: heading3,
+                                                  ),
+                                                  Text(
+                                                    e.about.toString(),
+                                                    style: heading6,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
                                 ),
-                                const Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 12),
-                                    child: Text(
-                                      "Reported Contact",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800),
+                                SizedBox(
+                                  width: screenWidth * 0.7,
+                                  height: screenWidth * 0.35,
+                                  child: Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Get.to(const JoinUnitScreen());
+                                        },
+                                        child: const Column(
+                                          children: [
+                                            Icon(
+                                              Icons.add_card_outlined,
+                                              color: Colors.green,
+                                            ),
+                                            Text(
+                                              'Join a Unit',
+                                              style: heading6,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12.0),
-                                  child: Text(
-                                    user.data!.report!.length.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w800),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     )
@@ -285,5 +526,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  activityStacts(image, header, number) {
+    return Card(
+      elevation: 2,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 70,
+            height: 50,
+            child: Image.asset(image, fit: BoxFit.fill),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                header,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: Text(
+              number,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _joinHomecell() async {
+    var h = await HomecellApi().getHomecells(userID);
+    setState(() {
+      homecells = h;
+    });
   }
 }

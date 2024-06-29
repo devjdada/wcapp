@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 const Color kWhite = Colors.white;
 const Color kblack = Colors.black;
 const Color kBlue = Color(0xff5663ff);
-const Color kPrimary = Color(0xBB8338f4);
+const Color kPrimary = Color.fromARGB(255, 8, 87, 99);
 const Color kMenuIconColor = Color(0xff800000);
 
 Map<int, Color> colorCodes = {
-  100: const Color.fromRGBO(131, 56, 244, .1),
-  200: const Color.fromRGBO(131, 56, 244, .2),
-  300: const Color.fromRGBO(131, 56, 244, .3),
-  400: const Color.fromRGBO(131, 56, 244, .4),
-  500: const Color.fromRGBO(131, 56, 244, .5),
-  600: const Color.fromRGBO(131, 56, 244, .6),
-  700: const Color.fromRGBO(131, 56, 244, .7),
-  800: const Color.fromRGBO(131, 56, 244, .8),
-  900: const Color.fromRGBO(131, 56, 244, .9)
+  100: const Color.fromRGBO(8, 87, 99, .1),
+  200: const Color.fromRGBO(8, 87, 99, .2),
+  300: const Color.fromRGBO(8, 87, 99, .3),
+  400: const Color.fromRGBO(8, 87, 99, .4),
+  500: const Color.fromRGBO(8, 87, 99, .5),
+  600: const Color.fromRGBO(8, 87, 99, .6),
+  700: const Color.fromRGBO(8, 87, 99, .7),
+  800: const Color.fromRGBO(8, 87, 99, .8),
+  900: const Color.fromRGBO(8, 87, 99, .9)
 };
 MaterialColor primary = MaterialColor(0xBB8338f4, colorCodes);
 // Color(0xBB8338f4)
@@ -42,8 +42,21 @@ Color textBlack = const Color(0xff222222);
 Color textGrey = const Color(0xff94959b);
 Color textWhiteGrey = const Color(0xfff1f1f5);
 
-const TextStyle heading2 =
-    TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kWhite);
+const TextStyle heading1 = TextStyle(
+  fontSize: 24,
+  fontWeight: FontWeight.w700,
+  color: kPrimary,
+);
+const TextStyle heading2 = TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.w700,
+  color: kPrimary,
+);
+const TextStyle heading3 = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.w700,
+  color: kPrimary,
+);
 
 const TextStyle heading5 = TextStyle(
   fontSize: 18,

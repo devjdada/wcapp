@@ -106,8 +106,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppString.dashboardScreen),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(
+            AppString.dashboardScreen,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
         drawer: const Drawer(
           child: AppDrawer(),

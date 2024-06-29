@@ -1,4 +1,3 @@
-
 import 'package:winners/schema/HomecellsSchema.dart';
 import 'package:winners/service/HttpService.dart';
 
@@ -8,5 +7,8 @@ class HomecellApi {
     return HomecellsSchema.fromJson(res.data);
   }
 
- 
+  joinHomecell(data) async {
+    await HttpService().post('wsf-member', data: data);
+    return true;
+  }
 }

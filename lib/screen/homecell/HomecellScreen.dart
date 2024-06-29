@@ -31,7 +31,6 @@ class _HomecellScreenState extends State<HomecellScreen> {
       var homecells = await HomecellApi().getHomecells(widget.station);
       return homecells;
     } catch (e) {
-      print('Error fetching homecells: $e');
       return null;
     }
   }
@@ -61,7 +60,11 @@ class _HomecellScreenState extends State<HomecellScreen> {
                   pinned: true,
                   actions: <Widget>[
                     IconButton(
-                      icon: const Icon(Icons.search),
+                      icon: const Icon(
+                        Icons.search,
+                        size: 30,
+                        color: Colors.white,
+                      ),
                       onPressed: () {
                         showSearch(
                           context: context,
@@ -72,11 +75,11 @@ class _HomecellScreenState extends State<HomecellScreen> {
                   ],
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Text(
+                    title: const Text(
                       'Homecells',
-                      textScaler: TextScaler.linear(2),
+                      textScaler: TextScaler.linear(1),
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
+                        color: Colors.white,
                       ),
                     ),
                     background: Image.asset(

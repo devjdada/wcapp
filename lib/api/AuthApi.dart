@@ -19,7 +19,6 @@ class AuthApi {
         return true;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -61,6 +60,11 @@ class AuthApi {
   }
 
   logOut() async {
+    Response out = await HttpService().get('logout');
+    print("LOGOU TEST");
+    print(out.data);
+    print("LOGOU TEST");
+
     await AppStore.logOut();
     return true;
   }

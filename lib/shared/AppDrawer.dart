@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:winners/api/AuthApi.dart';
 import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/screen/Assigned/MyAssignedContact.dart';
-import 'package:winners/screen/Auth/LoginScreen.dart';
 import 'package:winners/screen/contact/ContactReportScreen.dart';
 import 'package:winners/screen/contact/MyContactScreen.dart';
+import 'package:winners/screen/dev/underDev.dart';
 import 'package:winners/screen/home/DashboardScreen.dart';
 import 'package:winners/screen/homecell/HomecellScreen.dart';
 import 'package:winners/screen/profile/ProfileScreen.dart';
@@ -213,6 +213,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
+                    Get.to(const UnderDev());
                   },
                 ),
                 ListTile(
@@ -230,6 +231,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
+                    Get.to(const UnderDev());
                   },
                 ),
                 ListTile(
@@ -245,7 +247,10 @@ class _AppDrawerState extends State<AppDrawer> {
                     color: Colors.white70,
                     size: 24,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Get.to(const UnderDev());
+                  },
                 ),
                 ListTile(
                   title: const Text(

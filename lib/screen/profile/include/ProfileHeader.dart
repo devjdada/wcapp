@@ -134,10 +134,20 @@ class ProfileHeader extends StatelessWidget {
             ],
           ),
         ),
-        const Positioned(
+        Positioned(
           top: 26.0,
           left: 4.0,
-          child: BackButton(color: Colors.white),
+          child: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                color: Colors.white,
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
         ),
         Positioned(
           top: 26.0,

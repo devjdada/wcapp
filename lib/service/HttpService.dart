@@ -37,6 +37,29 @@ class HttpService {
     final response = await _dio.post(path,
         data: data, queryParameters: queryParameters, options: requestOptions);
 
+    print("My response is ${response.toString()}");
+    print("My response code is ${response.statusCode}");
+    print("My response header is ${response.headers}");
+    print("My response requestOption is ${response.requestOptions}");
+
+    return response;
+  }
+
+  Future<Response> update(String path,
+      {dynamic data,
+      Map<String, dynamic>? queryParameters,
+      Options? options}) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers ??= {};
+
+    final authorization = await getAuthorizationHeader();
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
+
+    final response = await _dio.put(path,
+        data: data, queryParameters: queryParameters, options: requestOptions);
+
     // print("My response is ${response.toString()}");
     // print("My response code is ${response.statusCode}");
     // print("My response header is ${response.headers}");

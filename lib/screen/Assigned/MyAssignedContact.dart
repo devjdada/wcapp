@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:winners/api/SoulApi.dart';
 import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/MyAssignedSchema.dart';
-import 'package:winners/screen/contact/ContactDetalScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/loader.dart';
 import 'package:winners/shared/themes.dart';
@@ -20,14 +19,14 @@ class MyAssignedContact extends StatefulWidget {
 }
 
 class _MyAssignedContactState extends State<MyAssignedContact> {
-  late MyAssignedSchema? myAssigned;
+  MyAssignedSchema? myAssigned;
 
   bool loading = true;
 
   @override
   void initState() {
     super.initState();
-    getData("${widget.user.user!.id}");
+    getData("${widget.user.user?.id ?? ''}");
   }
 
   Future<void> getData(String id) async {
@@ -95,6 +94,7 @@ class _MyAssignedContactState extends State<MyAssignedContact> {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
+                        var contact = myAssigned!.data![index].contact;
                         return Slidable(
                           key: ValueKey(index),
                           startActionPane: ActionPane(
@@ -122,7 +122,9 @@ class _MyAssignedContactState extends State<MyAssignedContact> {
                                 icon: Icons.call,
                                 label: 'Call',
                                 onPressed: (BuildContext context) {
-                                  // call("${mySoul.contact?.phone}");
+                                  if (contact?.phone != null) {
+                                    call(contact!.phone!);
+                                  }
                                 },
                               ),
                             ],
@@ -134,9 +136,9 @@ class _MyAssignedContactState extends State<MyAssignedContact> {
                                 child: CircleAvatar(
                                   backgroundColor: primary,
                                   child: Text(
-                                    myAssigned!
-                                        .data![index].contact!.firstname![0]
-                                        .toUpperCase(),
+                                    contact?.firstname?.isNotEmpty == true
+                                        ? contact!.firstname![0].toUpperCase()
+                                        : '',
                                     style: const TextStyle(
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.w700,
@@ -144,14 +146,15 @@ class _MyAssignedContactState extends State<MyAssignedContact> {
                                   ),
                                 ),
                               ),
-                              title: const Text(
-                                "Surnmae and Last name",
-                                style: TextStyle(
+                              title: Text(
+                                "${contact?.surname ?? 'Unknown'} ${contact?.firstname ?? 'Name'}",
+                                style: const TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              subtitle: const Text("Location Phone"),
+                              subtitle: Text(
+                                  "${contact?.location ?? 'No location'} ${contact?.phone ?? 'No phone'}"),
                             ),
                             onTap: () {
                               // Navigator.of(context).push(

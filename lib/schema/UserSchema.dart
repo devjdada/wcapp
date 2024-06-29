@@ -1,209 +1,245 @@
 class UserSchema {
-  Data? data;
+  Homecell? homecell;
+  List<Units>? units;
+  Me? me;
 
-  UserSchema({this.data});
+  UserSchema({this.homecell, this.units, this.me});
 
   UserSchema.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    homecell =
+        json['homecell'] != null ? Homecell.fromJson(json['homecell']) : null;
+    if (json['units'] != null) {
+      units = <Units>[];
+      json['units'].forEach((v) {
+        units!.add(Units.fromJson(v));
+      });
+    }
+    me = json['me'] != null ? Me.fromJson(json['me']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
+    if (homecell != null) {
+      data['homecell'] = homecell!.toJson();
+    }
+    if (units != null) {
+      data['units'] = units!.map((v) => v.toJson()).toList();
+    }
+    if (me != null) {
+      data['me'] = me!.toJson();
     }
     return data;
   }
 }
 
-class Data {
+class Homecell {
   int? id;
-  String? name;
-  String? surname;
-  String? firstname;
-  String? marital;
-  String? gender;
-  String? email;
-  String? phone;
-  String? emailVerifiedAt;
-  String? twoFactorConfirmedAt;
-  String? address;
-  String? dob;
-  String? status;
-  String? currentTeamId;
   int? stationId;
-  String? profilePhotoPath;
+  int? districtId;
+  int? provinceId;
+  String? phone;
+  String? title;
+  String? about;
+  String? address;
   String? createdAt;
   String? updatedAt;
-  String? profilePhotoUrl;
-  List<Unit>? unit;
-  List<UnitLeader>? unitLeader;
-  List<Souls>? souls;
-  List<Report>? report;
-  List<Assigned>? assigned;
-  Homecell? homecell;
-  HomecellLeaders? homecellLeaders;
-  Station? station;
+  District? district;
+  Province? province;
+  List<Leaders>? leaders;
 
-  Data(
+  Homecell(
       {this.id,
-      this.name,
-      this.surname,
-      this.firstname,
-      this.marital,
-      this.gender,
-      this.email,
-      this.phone,
-      this.emailVerifiedAt,
-      this.twoFactorConfirmedAt,
-      this.address,
-      this.dob,
-      this.status,
-      this.currentTeamId,
       this.stationId,
-      this.profilePhotoPath,
+      this.districtId,
+      this.provinceId,
+      this.phone,
+      this.title,
+      this.about,
+      this.address,
       this.createdAt,
       this.updatedAt,
-      this.profilePhotoUrl,
-      this.unit,
-      this.unitLeader,
-      this.souls,
-      this.report,
-      this.assigned,
-      this.homecell,
-      this.homecellLeaders,
-      this.station});
+      this.district,
+      this.province,
+      this.leaders});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Homecell.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    surname = json['surname'];
-    firstname = json['firstname'];
-    marital = json['marital'];
-    gender = json['gender'];
-    email = json['email'];
-    phone = json['phone'];
-    emailVerifiedAt = json['email_verified_at'];
-    twoFactorConfirmedAt = json['two_factor_confirmed_at'];
-    address = json['address'];
-    dob = json['dob'];
-    status = json['status'];
-    currentTeamId = json['current_team_id'];
     stationId = json['station_id'];
-    profilePhotoPath = json['profile_photo_path'];
+    districtId = json['district_id'];
+    provinceId = json['province_id'];
+    phone = json['phone'];
+    title = json['title'];
+    about = json['about'];
+    address = json['address'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    profilePhotoUrl = json['profile_photo_url'];
-    if (json['unit'] != null) {
-      unit = <Unit>[];
-      json['unit'].forEach((v) {
-        unit!.add(Unit.fromJson(v));
+    district =
+        json['district'] != null ? District.fromJson(json['district']) : null;
+    province =
+        json['province'] != null ? Province.fromJson(json['province']) : null;
+    if (json['leaders'] != null) {
+      leaders = <Leaders>[];
+      json['leaders'].forEach((v) {
+        leaders!.add(Leaders.fromJson(v));
       });
     }
-    if (json['unit_leader'] != null) {
-      unitLeader = <UnitLeader>[];
-      json['unit_leader'].forEach((v) {
-        unitLeader!.add(UnitLeader.fromJson(v));
-      });
-    }
-    if (json['souls'] != null) {
-      souls = <Souls>[];
-      json['souls'].forEach((v) {
-        souls!.add(Souls.fromJson(v));
-      });
-    }
-    if (json['report'] != null) {
-      report = <Report>[];
-      json['report'].forEach((v) {
-        report!.add(Report.fromJson(v));
-      });
-    }
-    if (json['assigned'] != null) {
-      assigned = <Assigned>[];
-      json['assigned'].forEach((v) {
-        assigned!.add(Assigned.fromJson(v));
-      });
-    }
-    homecell = json['homecell'] != null
-        ? Homecell.fromJson(json['homecell'])
-        : null;
-    homecellLeaders = json['homecell_leaders'] != null
-        ? HomecellLeaders.fromJson(json['homecell_leaders'])
-        : null;
-    station =
-        json['station'] != null ? Station.fromJson(json['station']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['name'] = name;
-    data['surname'] = surname;
-    data['firstname'] = firstname;
-    data['marital'] = marital;
-    data['gender'] = gender;
-    data['email'] = email;
-    data['phone'] = phone;
-    data['email_verified_at'] = emailVerifiedAt;
-    data['two_factor_confirmed_at'] = twoFactorConfirmedAt;
-    data['address'] = address;
-    data['dob'] = dob;
-    data['status'] = status;
-    data['current_team_id'] = currentTeamId;
     data['station_id'] = stationId;
-    data['profile_photo_path'] = profilePhotoPath;
+    data['district_id'] = districtId;
+    data['province_id'] = provinceId;
+    data['phone'] = phone;
+    data['title'] = title;
+    data['about'] = about;
+    data['address'] = address;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    data['profile_photo_url'] = profilePhotoUrl;
-    if (unit != null) {
-      data['unit'] = unit!.map((v) => v.toJson()).toList();
+    if (district != null) {
+      data['district'] = district!.toJson();
     }
-    if (unitLeader != null) {
-      data['unit_leader'] = unitLeader!.map((v) => v.toJson()).toList();
+    if (province != null) {
+      data['province'] = province!.toJson();
     }
-    if (souls != null) {
-      data['souls'] = souls!.map((v) => v.toJson()).toList();
-    }
-    if (report != null) {
-      data['report'] = report!.map((v) => v.toJson()).toList();
-    }
-    if (assigned != null) {
-      data['assigned'] = assigned!.map((v) => v.toJson()).toList();
-    }
-    if (homecell != null) {
-      data['homecell'] = homecell!.toJson();
-    }
-    if (homecellLeaders != null) {
-      data['homecell_leaders'] = homecellLeaders!.toJson();
-    }
-    if (station != null) {
-      data['station'] = station!.toJson();
+    if (leaders != null) {
+      data['leaders'] = leaders!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Unit {
+class District {
   int? id;
   int? stationId;
-  int? userId;
-  int? unitId;
+  int? provinceId;
+  String? phone;
+  String? title;
+  String? about;
+  String? address;
   String? createdAt;
   String? updatedAt;
 
-  Unit(
+  District(
       {this.id,
       this.stationId,
-      this.userId,
-      this.unitId,
+      this.provinceId,
+      this.phone,
+      this.title,
+      this.about,
+      this.address,
       this.createdAt,
       this.updatedAt});
 
-  Unit.fromJson(Map<String, dynamic> json) {
+  District.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    stationId = json['station_id'];
+    provinceId = json['province_id'];
+    phone = json['phone'];
+    title = json['title'];
+    about = json['about'];
+    address = json['address'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['province_id'] = provinceId;
+    data['phone'] = phone;
+    data['title'] = title;
+    data['about'] = about;
+    data['address'] = address;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    return data;
+  }
+}
+
+class Province {
+  int? id;
+  int? stationId;
+  String? title;
+  String? phone;
+  String? about;
+  String? address;
+  String? createdAt;
+  String? updatedAt;
+
+  Province(
+      {this.id,
+      this.stationId,
+      this.title,
+      this.phone,
+      this.about,
+      this.address,
+      this.createdAt,
+      this.updatedAt});
+
+  Province.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    stationId = json['station_id'];
+    title = json['title'];
+    phone = json['phone'];
+    about = json['about'];
+    address = json['address'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['title'] = title;
+    data['phone'] = phone;
+    data['about'] = about;
+    data['address'] = address;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    return data;
+  }
+}
+
+class Leaders {
+  int? id;
+  int? stationId;
+  int? userId;
+  int? homecellId;
+  String? position;
+  int? status;
+  String? start;
+  String? end;
+  String? about;
+  String? createdAt;
+  String? updatedAt;
+
+  Leaders(
+      {this.id,
+      this.stationId,
+      this.userId,
+      this.homecellId,
+      this.position,
+      this.status,
+      this.start,
+      this.end,
+      this.about,
+      this.createdAt,
+      this.updatedAt});
+
+  Leaders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     stationId = json['station_id'];
     userId = json['user_id'];
-    unitId = json['unit_id'];
+    homecellId = json['homecell_id'];
+    position = json['position'];
+    status = json['status'];
+    start = json['start'];
+    end = json['end'];
+    about = json['about'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -213,14 +249,79 @@ class Unit {
     data['id'] = id;
     data['station_id'] = stationId;
     data['user_id'] = userId;
-    data['unit_id'] = unitId;
+    data['homecell_id'] = homecellId;
+    data['position'] = position;
+    data['status'] = status;
+    data['start'] = start;
+    data['end'] = end;
+    data['about'] = about;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;
   }
 }
 
-class UnitLeader {
+class Units {
+  int? id;
+  int? stationId;
+  String? title;
+  String? phone;
+  String? coverImagePath;
+  String? email;
+  String? about;
+  String? createdAt;
+  String? updatedAt;
+  List<Leadership>? leadership;
+
+  Units(
+      {this.id,
+      this.stationId,
+      this.title,
+      this.phone,
+      this.coverImagePath,
+      this.email,
+      this.about,
+      this.createdAt,
+      this.updatedAt,
+      this.leadership});
+
+  Units.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    stationId = json['station_id'];
+    title = json['title'];
+    phone = json['phone'];
+    coverImagePath = json['cover_image_path'];
+    email = json['email'];
+    about = json['about'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    if (json['leadership'] != null) {
+      leadership = <Leadership>[];
+      json['leadership'].forEach((v) {
+        leadership!.add(Leadership.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['station_id'] = stationId;
+    data['title'] = title;
+    data['phone'] = phone;
+    data['cover_image_path'] = coverImagePath;
+    data['email'] = email;
+    data['about'] = about;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (leadership != null) {
+      data['leadership'] = leadership!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Leadership {
   int? id;
   int? stationId;
   int? userId;
@@ -233,7 +334,7 @@ class UnitLeader {
   String? createdAt;
   String? updatedAt;
 
-  UnitLeader(
+  Leadership(
       {this.id,
       this.stationId,
       this.userId,
@@ -246,7 +347,7 @@ class UnitLeader {
       this.createdAt,
       this.updatedAt});
 
-  UnitLeader.fromJson(Map<String, dynamic> json) {
+  Leadership.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     stationId = json['station_id'];
     userId = json['user_id'];
@@ -277,6 +378,173 @@ class UnitLeader {
   }
 }
 
+class Me {
+  int? id;
+  String? name;
+  String? surname;
+  String? firstname;
+  String? marital;
+  String? gender;
+  String? email;
+  String? phone;
+  String? emailVerifiedAt;
+  String? twoFactorConfirmedAt;
+  String? address;
+  String? dob;
+  String? status;
+  String? currentTeamId;
+  int? stationId;
+  String? profilePhotoPath;
+  String? createdAt;
+  String? updatedAt;
+  String? profilePhotoUrl;
+  List<AsUnitLeader>? asUnitLeader;
+  List<Souls>? souls;
+  List<Report>? report;
+  List<Assigned>? assigned;
+  Leaders? homecellLeaders;
+  Station? station;
+
+  Me(
+      {this.id,
+      this.name,
+      this.surname,
+      this.firstname,
+      this.marital,
+      this.gender,
+      this.email,
+      this.phone,
+      this.emailVerifiedAt,
+      this.twoFactorConfirmedAt,
+      this.address,
+      this.dob,
+      this.status,
+      this.currentTeamId,
+      this.stationId,
+      this.profilePhotoPath,
+      this.createdAt,
+      this.updatedAt,
+      this.profilePhotoUrl,
+      this.asUnitLeader,
+      this.souls,
+      this.report,
+      this.assigned,
+      this.homecellLeaders,
+      this.station});
+
+  Me.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    surname = json['surname'];
+    firstname = json['firstname'];
+    marital = json['marital'];
+    gender = json['gender'];
+    email = json['email'];
+    phone = json['phone'];
+    emailVerifiedAt = json['email_verified_at'];
+    twoFactorConfirmedAt = json['two_factor_confirmed_at'];
+    address = json['address'];
+    dob = json['dob'];
+    status = json['status'];
+    currentTeamId = json['current_team_id'];
+    stationId = json['station_id'];
+    profilePhotoPath = json['profile_photo_path'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    profilePhotoUrl = json['profile_photo_url'];
+    if (json['as_unit_leader'] != null) {
+      asUnitLeader = <AsUnitLeader>[];
+      json['as_unit_leader'].forEach((v) {
+        asUnitLeader!.add(AsUnitLeader.fromJson(v));
+      });
+    }
+    if (json['souls'] != null) {
+      souls = <Souls>[];
+      json['souls'].forEach((v) {
+        souls!.add(Souls.fromJson(v));
+      });
+    }
+    if (json['report'] != null) {
+      report = <Report>[];
+      json['report'].forEach((v) {
+        report!.add(Report.fromJson(v));
+      });
+    }
+    if (json['assigned'] != null) {
+      assigned = <Assigned>[];
+      json['assigned'].forEach((v) {
+        assigned!.add(Assigned.fromJson(v));
+      });
+    }
+    homecellLeaders = json['homecell_leaders'] != null
+        ? Leaders.fromJson(json['homecell_leaders'])
+        : null;
+    station =
+        json['station'] != null ? Station.fromJson(json['station']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['surname'] = surname;
+    data['firstname'] = firstname;
+    data['marital'] = marital;
+    data['gender'] = gender;
+    data['email'] = email;
+    data['phone'] = phone;
+    data['email_verified_at'] = emailVerifiedAt;
+    data['two_factor_confirmed_at'] = twoFactorConfirmedAt;
+    data['address'] = address;
+    data['dob'] = dob;
+    data['status'] = status;
+    data['current_team_id'] = currentTeamId;
+    data['station_id'] = stationId;
+    data['profile_photo_path'] = profilePhotoPath;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['profile_photo_url'] = profilePhotoUrl;
+    if (asUnitLeader != null) {
+      data['as_unit_leader'] = asUnitLeader!.map((v) => v.toJson()).toList();
+    }
+    if (souls != null) {
+      data['souls'] = souls!.map((v) => v.toJson()).toList();
+    }
+    if (report != null) {
+      data['report'] = report!.map((v) => v.toJson()).toList();
+    }
+    if (assigned != null) {
+      data['assigned'] = assigned!.map((v) => v.toJson()).toList();
+    }
+    if (homecellLeaders != null) {
+      data['homecell_leaders'] = homecellLeaders!.toJson();
+    }
+    if (station != null) {
+      data['station'] = station!.toJson();
+    }
+    return data;
+  }
+}
+
+class AsUnitLeader {
+  int? id;
+  String? name;
+
+  AsUnitLeader({this.id, this.name});
+
+  AsUnitLeader.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    return data;
+  }
+}
+
 class Souls {
   int? id;
   int? stationId;
@@ -287,7 +555,7 @@ class Souls {
   String? phone;
   String? marital;
   String? gender;
-  String? ocupation;
+  String? occupation;
   String? address;
   String? email;
   String? busStop;
@@ -311,7 +579,7 @@ class Souls {
       this.phone,
       this.marital,
       this.gender,
-      this.ocupation,
+      this.occupation,
       this.address,
       this.email,
       this.busStop,
@@ -335,7 +603,7 @@ class Souls {
     phone = json['phone'];
     marital = json['marital'];
     gender = json['gender'];
-    ocupation = json['ocupation'];
+    occupation = json['occupation'];
     address = json['address'];
     email = json['email'];
     busStop = json['bus_stop'];
@@ -361,7 +629,7 @@ class Souls {
     data['phone'] = phone;
     data['marital'] = marital;
     data['gender'] = gender;
-    data['ocupation'] = ocupation;
+    data['occupation'] = occupation;
     data['address'] = address;
     data['email'] = email;
     data['bus_stop'] = busStop;
@@ -486,100 +754,6 @@ class Assigned {
     data['type'] = type;
     data['assigned_to'] = assignedTo;
     data['contact_id'] = contactId;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    return data;
-  }
-}
-
-class Homecell {
-  int? id;
-  int? stationId;
-  int? userId;
-  int? homecellId;
-  String? createdAt;
-  String? updatedAt;
-
-  Homecell(
-      {this.id,
-      this.stationId,
-      this.userId,
-      this.homecellId,
-      this.createdAt,
-      this.updatedAt});
-
-  Homecell.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    stationId = json['station_id'];
-    userId = json['user_id'];
-    homecellId = json['homecell_id'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['station_id'] = stationId;
-    data['user_id'] = userId;
-    data['homecell_id'] = homecellId;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    return data;
-  }
-}
-
-class HomecellLeaders {
-  int? id;
-  int? stationId;
-  int? userId;
-  int? homecellId;
-  String? position;
-  int? status;
-  String? start;
-  String? end;
-  String? about;
-  String? createdAt;
-  String? updatedAt;
-
-  HomecellLeaders(
-      {this.id,
-      this.stationId,
-      this.userId,
-      this.homecellId,
-      this.position,
-      this.status,
-      this.start,
-      this.end,
-      this.about,
-      this.createdAt,
-      this.updatedAt});
-
-  HomecellLeaders.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    stationId = json['station_id'];
-    userId = json['user_id'];
-    homecellId = json['homecell_id'];
-    position = json['position'];
-    status = json['status'];
-    start = json['start'];
-    end = json['end'];
-    about = json['about'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['station_id'] = stationId;
-    data['user_id'] = userId;
-    data['homecell_id'] = homecellId;
-    data['position'] = position;
-    data['status'] = status;
-    data['start'] = start;
-    data['end'] = end;
-    data['about'] = about;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;
