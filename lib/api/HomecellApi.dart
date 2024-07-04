@@ -11,4 +11,9 @@ class HomecellApi {
     await HttpService().post('wsf-member', data: data);
     return true;
   }
+
+  postReport(data) async {
+    await HttpService().post('wsf-report', data: data);
+    return true;
+  }
 }

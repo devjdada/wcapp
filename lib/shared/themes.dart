@@ -4,6 +4,7 @@ const Color kWhite = Colors.white;
 const Color kblack = Colors.black;
 const Color kBlue = Color(0xff5663ff);
 const Color kPrimary = Color.fromARGB(255, 8, 87, 99);
+const Color kPrimaryLight = Color.fromARGB(25, 228, 204, 233);
 const Color kMenuIconColor = Color(0xff800000);
 
 Map<int, Color> colorCodes = {

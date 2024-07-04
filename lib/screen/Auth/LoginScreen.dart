@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 flex: 2,
                 child: Center(
                     child: Image(
-                        image: AssetImage('assets/images/login.png'),
+                        image: AssetImage('assets/images/papa.png'),
                         fit: BoxFit.cover)),
               ),
               GestureDetector(
@@ -106,9 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 25,
                   ),
                   RoundedButton(
-                      buttonName: 'Login',
-                      callback: _loginScript,
-                      loading: _isLoading),
+                    buttonName: 'Login',
+                    callback: _loginScript,
+                    loading: _isLoading,
+                  ),
                   const SizedBox(
                     height: 25,
                   ),

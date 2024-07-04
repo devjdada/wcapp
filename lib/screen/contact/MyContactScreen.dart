@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:winners/api/SoulApi.dart';
+import 'package:winners/api/UserApi.dart';
 import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/MyContactSchema.dart';
 import 'package:winners/screen/contact/ContactDetalScreen.dart';
+import 'package:winners/screen/contact/NewReportScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/loader.dart';
 import 'package:winners/shared/themes.dart';
@@ -34,6 +37,7 @@ class _MyContactScreenState extends State<MyContactScreen> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _locationController = TextEditingController();
+  late LogUserSchema user;
 
   // static const List<SoulActionMenuList> choices = <SoulActionMenuList>[
   //   SoulActionMenuList(
@@ -50,6 +54,15 @@ class _MyContactScreenState extends State<MyContactScreen> {
   void initState() {
     super.initState();
     getData(widget.user.user!.id);
+    getLogUser();
+  }
+
+  getLogUser() async {
+    var u = await UserApi().getLogUser();
+    setState(() {
+      loading = false;
+      user = u;
+    });
   }
 
   _saveNewContact() async {
@@ -189,7 +202,13 @@ class _MyContactScreenState extends State<MyContactScreen> {
     });
   }
 
-  // void call(String number) => launch("tel:$number");
+  Future<void> call(String number) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: number,
+    );
+    await launchUrl(launchUri);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -263,14 +282,12 @@ class _MyContactScreenState extends State<MyContactScreen> {
                                 icon: Icons.edit,
                                 label: 'Report',
                                 onPressed: (BuildContext context) {
-                                  // Navigator.of(context).push(MaterialPageRoute(
-                                  //     builder: (BuildContext context) =>
-                                  //         SoulReportScreen(
-                                  //           id: "${mySoul.id}",
-                                  //           name:
-                                  //               "${mySoul.surname} ${mySoul.firstname}",
-                                  //           user: widget.user,
-                                  //         )));
+                                  Get.to(NewReportScreen(
+                                    id: "${mySoul.id}",
+                                    name:
+                                        "${mySoul.surname} ${mySoul.firstname}",
+                                    user: user,
+                                  ));
                                 },
                               ),
                               SlidableAction(
@@ -279,7 +296,7 @@ class _MyContactScreenState extends State<MyContactScreen> {
                                 icon: Icons.call,
                                 label: 'Call',
                                 onPressed: (BuildContext context) {
-                                  // call("${mySoul.phone}");
+                                  call("${mySoul.phone}");
                                 },
                               ),
                             ],

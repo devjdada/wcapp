@@ -95,7 +95,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Get.to(const DashboardScreen());
+                    Get.to(() => const DashboardScreen());
                   },
                 ),
                 ListTile(

@@ -29,4 +29,9 @@ class SoulApi {
     var response = await HttpService().get('soul/$id');
     return ContactDetailSchema.fromJson(response.data);
   }
+
+  postReport(data) async {
+    await HttpService().post('soul-report', data: data);
+    return true;
+  }
 }

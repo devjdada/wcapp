@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:winners/api/GalleryApi.dart';
+import 'package:winners/api/TestimonyApi.dart';
 import 'package:winners/api/YtApi.dart';
+import 'package:winners/schema/GallerySchema.dart';
 import 'package:winners/schema/LogUserSchema.dart';
+import 'package:winners/schema/TestimonySchema.dart';
 import 'package:winners/schema/YtSchema.dart';
 import 'package:winners/screen/Auth/LoginScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
@@ -24,10 +28,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late List img;
   bool loading = false;
   bool loadingTsy = false;
+  bool loadingGal = false;
   bool loadingYT = false;
   bool loadingYTPre = false;
   late LogUserSchema logUser;
   late String userPhone;
+  late TestimonySchema testimonies;
+  late GallerySchema galleries;
 
   bool loadGallery = false;
 
@@ -43,9 +50,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    // getTestimonies();
+    getTestimonies();
     getLiveYT();
-    // gallery();
+    gallery();
     // _intro();
     initUserData();
   }
@@ -57,19 +64,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() {
         userInfo = decodeUser;
         logged = true;
-        print(decodeUser);
       });
     } catch (e) {
       print(e);
     }
     if (!logged) {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const LoginScreen()));
     }
   }
 
   Future getLiveYT() async {
     var tsyList = await YtApi().getYT();
+    // print(tsyList);
     setState(() {
       yT = tsyList;
       if (yT.pageInfo.totalResults != 0) {
@@ -83,24 +90,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> getVideoList() async {
     var video = await youtube.channel(AppString.yTChannel);
+
     setState(() {
       videoResult = video;
       loadingYTPre = true;
     });
   }
 
-  // Future getTestimonies() async {
-  //   try {
-  //     Response response = await http.getRequest('testimony_dashboard');
-  //     var tsyList = TestimonyListModal.fromJson(response.data);
-  //     setState(() {
-  //       testimonies = tsyList; //
-  //       loadingTsy = true;
-  //     });
-  //   } on Exception catch (e) {
-  //     print(e);
-  //   }
-  // }
+  Future gallery() async {
+    try {
+      var gallist = await GalleryApi().getGallery();
+      setState(() {
+        galleries = gallist; //
+        loadGallery = true;
+      });
+    } on Exception catch (err) {
+      print(err);
+    }
+  }
+
+  Future getTestimonies() async {
+    try {
+      var tsyList = await TestimonyApi().getTestimony();
+      setState(() {
+        testimonies = tsyList; //
+        loadingTsy = true;
+      });
+    } on Exception catch (err) {
+      print(err);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -503,99 +522,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Row(
                         children: <Widget>[
                           const Expanded(
-                              child: Text("Testimonies",
-                                  style: TextStyle(fontSize: 16.0))),
-                          Expanded(
-                              child: InkWell(
-                            child: const Text(
-                              "View All",
-                              style: TextStyle(color: Color(0XFF2BD093)),
-                              textAlign: TextAlign.end,
+                            child: Text(
+                              "Testimonies",
+                              style: TextStyle(fontSize: 16.0),
                             ),
-                            onTap: () {
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (BuildContext context) =>
-                              //         TestimonyScreen(),
-                              //     settings: const RouteSettings(
-                              //         name: 'testimony', arguments: [])));
-                            },
-                          ))
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              child: const Text(
+                                "View All",
+                                style: TextStyle(color: Color(0XFF2BD093)),
+                                textAlign: TextAlign.end,
+                              ),
+                              onTap: () {
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (BuildContext context) =>
+                                //         TestimonyScreen(),
+                                //     settings: const RouteSettings(
+                                //         name: 'testimony', arguments: [])));
+                              },
+                            ),
+                          )
                         ],
                       ),
                       loadingTsy == false
-                          ? Container()
-                          : Row(
-                              children: <Widget>[
-                                for (int i = 0; i < 3; i++)
-                                  const Expanded(
-                                    child: SizedBox(
-                                      height: 100.0,
-                                      child: Column(
-                                        children: <Widget>[
-                                          // InkWell(
-                                          //   child: Container(
-                                          //     height: 100.0,
-                                          //     decoration: BoxDecoration(
-                                          //       borderRadius:
-                                          //           BorderRadius.circular(5.0),
-                                          //     ),
-                                          //     child: Hero(
-                                          //         tag:
-                                          //             'tsyBanner${testimonies.data![i].id}',
-                                          //         child: Image(
-                                          //             image: NetworkImage(
-                                          //                 "${testimonies.data![i].imagex}"),
-                                          //             fit: BoxFit.cover)),
-                                          //   ),
-                                          //   onTap: () {
-                                          //     Navigator.of(context).push(
-                                          //         MaterialPageRoute(
-                                          //             builder: (BuildContext context) => TestimonyDetailsScreen(
-                                          //                 id: testimonies
-                                          //                     .data![i].id!
-                                          //                     .toInt(),
-                                          //                 img: testimonies
-                                          //                     .data![i].imagex!
-                                          //                     .toString(),
-                                          //                 whatGodDid:
-                                          //                     testimonies
-                                          //                         .data![i]
-                                          //                         .victory!
-                                          //                         .toString(),
-                                          //                 whatIDid: testimonies
-                                          //                     .data![i].youDid!
-                                          //                     .toString(),
-                                          //                 challenge: testimonies
-                                          //                     .data![i]
-                                          //                     .challenge!
-                                          //                     .toString(),
-                                          //                 title: testimonies.data![i].title!.toString(),
-                                          //                 fname: testimonies.data![i].surname!.toString(),
-                                          //                 lname: testimonies.data![i].firstname!.toString()),
-                                          //             settings: RouteSettings(name: 'testimony', arguments: [
-                                          //               testimonies.data![i].id,
-                                          //               testimonies
-                                          //                   .data![i].imagex,
-                                          //               testimonies
-                                          //                   .data![i].victory,
-                                          //               testimonies
-                                          //                   .data![i].youDid,
-                                          //               testimonies
-                                          //                   .data![i].challenge,
-                                          //               testimonies
-                                          //                   .data![i].title,
-                                          //               testimonies
-                                          //                   .data![i].surname,
-                                          //               testimonies
-                                          //                   .data![i].firstname
-                                          //             ])));
-                                          //   },
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
+                          ? const Center(
+                              child: Text("No Testimonies Found"),
+                            )
+                          : SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  children: testimonies.data!.map((e) {
+                                return Container(
+                                  margin: const EdgeInsets.only(right: 10.0),
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    image: DecorationImage(
+                                        image: NetworkImage(e.image.toString()),
+                                        fit: BoxFit.cover),
                                   ),
-                              ],
+                                );
+                              }).toList()),
                             ),
                       Row(
                         children: <Widget>[
@@ -622,7 +591,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      loadGallery == false ? Container() : const Center(),
+                      loadGallery == false
+                          ? const Center(
+                              child: Text("No Gallery Found"),
+                            )
+                          : SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  children: galleries.data!.map((e) {
+                                return Container(
+                                  margin: const EdgeInsets.only(right: 10.0),
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    image: DecorationImage(
+                                        image: NetworkImage(e.image.toString()),
+                                        fit: BoxFit.cover),
+                                  ),
+                                );
+                              }).toList()),
+                            ),
                       const SizedBox(
                         height: 10.0,
                       ),
@@ -644,11 +633,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   'assets/images/radio.png'),
                                               fit: BoxFit.cover)),
                                     ),
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed('/radio');
-                                      const RouteSettings(
-                                          name: 'canaanland', arguments: []);
-                                    },
+                                    onTap: () {},
                                   ),
                                 ],
                               ),
@@ -728,25 +713,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ));
   }
 
-  // Future fetchData() async {
-  //   http.Response res = await http.get(url);
-  //   var decodedJson = jsonDecode(res.body);
-  //   var tsyList = TestimonyModal.fromJson(decodedJson);
-  //   setState(() {
-  //     testimonies = tsyList;
-  //     loading = true;
-  //   });
-  // }
-
-  // Future gallery() async {
-  //   Response res = await http.get('gallery');
-  //   var gList = ImageModel.fromJson(res.data);
-  //   setState(() {
-  //     galleries = gList;
-  //     loadGallery = true;
-  //   });
-  // }
-
   socialLink(url, img) {
     return Expanded(
       child: SizedBox(
@@ -791,69 +757,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //     builder: (BuildContext context) => IntroScreen(),
       //     settings: RouteSettings(name: 'intro', arguments: [])));
     } else {
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).push(
+        MaterialPageRoute(
           builder: (BuildContext context) => const DashboardScreen(),
-          settings: RouteSettings(name: 'dashboard', arguments: [])));
+          settings: RouteSettings(name: 'dashboard', arguments: []),
+        ),
+      );
     }
   }
-
-  // imagViewer() {
-  //   return Container(
-  //       child: PhotoView(
-  //     imageProvider: NetworkImage(
-  //         'http://images4.fanpop.com/image/photos/21600000/Electronics-hd-wallpaper-21627626-1920-1200.jpg'),
-  //   ));
-  // }
-
-  // checkIfUserIsLogIn() {
-  //   if (AppSharedPreferences.isUserLoggedIn() != null) {
-  //     print("NOT NULL");
-  //     if (AppSharedPreferences.isUserLoggedIn() == true) {
-  //       print("AM LOG IN");
-  //     } else {
-  //       print("AM NOT LOG IN");
-  //     }
-  //   } else {
-  //     print("IS NULL");
-  //     // Navigator.of(context).push(
-  //     //     MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
-  //   }
-  // }
-
-  // testimonyView() {
-  //   ListView.builder(
-  //     itemBuilder: (context, index) {
-  //       final tsy = testimonies.data![index];
-  //       return InkWell(
-  //         child: Hero(
-  //             tag: 'tsyBanner${tsy.id}',
-  //             child: Image(
-  //                 image: NetworkImage('${tsy.imagex}'), fit: BoxFit.cover)),
-  //         onTap: () {
-  //           // Navigator.of(context).push(MaterialPageRoute(
-  //           //     builder: (BuildContext context) =>
-  //           //         TestimonyDetailsScreen(
-  //           //             id: testimonies.data?[index].id,
-  //           //             img: testimonies.data?[index].imagex,
-  //           //             whatGodDid: testimonies.data?[index].victory,
-  //           //             whatIDid: testimonies.data?[index].youDid,
-  //           //             challenge: testimonies.data?[index].challenge,
-  //           //             title: testimonies.data?[index].title,
-  //           //             fname: testimonies.data?[index].surname,
-  //           //             lname: testimonies.data?[index].firstname),
-  //           //     settings: RouteSettings(name: 'testimony', arguments: [
-  //           //       testimonies.data?[index].id,
-  //           //       testimonies.data?[index].imagex,
-  //           //       testimonies.data?[index].victory,
-  //           //       testimonies.data?[index].youDid,
-  //           //       testimonies.data?[index].challenge,
-  //           //       testimonies.data?[index].title,
-  //           //       testimonies.data?[index].surname,
-  //           //       testimonies.data?[index].firstname
-  //           //     ])));
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 }

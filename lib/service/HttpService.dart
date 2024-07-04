@@ -37,10 +37,11 @@ class HttpService {
     final response = await _dio.post(path,
         data: data, queryParameters: queryParameters, options: requestOptions);
 
-    print("My response is ${response.toString()}");
-    print("My response code is ${response.statusCode}");
-    print("My response header is ${response.headers}");
-    print("My response requestOption is ${response.requestOptions}");
+    // print("My response is ${response.toString()}");
+    // print("My response is ${response.data()}");
+    // print("My response code is ${response.statusCode}");
+    // print("My response header is ${response.headers}");
+    // print("My response requestOption is ${response.requestOptions}");
 
     return response;
   }

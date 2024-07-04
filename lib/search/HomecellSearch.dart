@@ -54,7 +54,7 @@ class HomecellSearch extends SearchDelegate {
             .where(
               (p) =>
                   p.title!.toLowerCase().contains(query.toLowerCase()) ||
-                  p.phone!.toLowerCase().contains(query.toLowerCase()) ||
+                  // p.about!.toLowerCase().contains(query.toLowerCase()) ||
                   p.address!.toLowerCase().contains(query.toLowerCase()),
             )
             .toList();

@@ -5,7 +5,6 @@ import 'package:intro_screen_onboarding_flutter/introscreenonboarding.dart';
 import 'package:winners/api/AuthApi.dart';
 import 'package:winners/screen/Auth/LoginScreen.dart';
 import 'package:winners/screen/home/DashboardScreen.dart';
-import 'package:winners/shared/data/AppStore.dart';
 import 'package:winners/shared/themes.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -33,36 +32,40 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   final List<Introduction> list = [
     Introduction(
-      title: 'Proverbs 11:30',
+      title: 'Welcome',
+      subTitle: 'Fortune 2024',
+      imageUrl: 'assets/images/papa.png',
+    ),
+    Introduction(
+      title: 'Pro. 11:30',
       subTitle: 'he who wins souls is wise.',
-      imageUrl: 'assets/images/onboarding3.png',
+      imageUrl: 'assets/images/logo.png',
     ),
     Introduction(
-      title: 'Delivery',
-      subTitle: 'Your order will be immediately collected and',
-      imageUrl: 'assets/images/onboarding2.png',
+      title: 'Caller Squard',
+      subTitle: 'Join Caller Squard to followup invitte through phone call',
+      imageUrl: 'assets/images/caller.png',
     ),
     Introduction(
-      title: 'Delivery',
-      subTitle: 'Your order will be immediately collected and',
-      imageUrl: 'assets/images/onboarding2.png',
+      title: 'Family',
+      subTitle: 'Welcome to the Family',
+      imageUrl: 'assets/images/ft_church.jpg',
+      imageHeight: 200,
+      imageWidth: 200,
     ),
     Introduction(
-      title: 'Receive Money',
-      subTitle: 'Pick up delivery at your door and enjoy groceries',
-      imageUrl: 'assets/images/onboarding1.png',
-    ),
-    Introduction(
-      title: 'Receive Second',
-      subTitle: 'Pick up delivery at your door and enjoy groceries',
-      imageUrl: 'assets/images/onboarding1.png',
+      title: 'Developer',
+      subTitle: 'https://www.echotronicsng.com/',
+      imageUrl: 'assets/images/echotronic logo.png',
+      imageHeight: 200,
+      imageWidth: 200,
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return IntroScreenOnboarding(
-      backgroudColor: Theme.of(context).colorScheme.inversePrimary,
+      backgroudColor: Colors.black87,
       foregroundColor: primary,
       introductionList: list,
       onTapSkipButton: () => Navigator.push(

@@ -31,7 +31,7 @@ class AppString {
   static const String yTKey = 'AIzaSyA-YEADmX6A4jo_jonZrUyTSvzYvautOpo';
   static const String yTChannel = 'UCyrJpoq0wnmY-PAxHJc0gDQ';
   static const String yTUrl =
-      'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=$yTChannel&type=video&eventType=live&key=$yTKey';
+      'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCyrJpoq0wnmY-PAxHJc0gDQ&type=video&eventType=live&key=AIzaSyA-YEADmX6A4jo_jonZrUyTSvzYvautOpo';
 
   static const String yTLiveDline =
       'https://www.youtube.com/embed/live_stream?channel=$yTChannel';

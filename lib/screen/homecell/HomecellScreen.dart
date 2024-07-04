@@ -171,7 +171,27 @@ class _HomecellScreenState extends State<HomecellScreen> {
     );
   }
 
-  void call(String number) => launch("tel:$number");
-  void sendSms(String number) => launch("sms:$number");
-  void sendEmail(String email) => launch("mailto:$email");
+  Future<void> call(String number) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: number,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Future<void> sendSms(String number) async {
+    final Uri launchUri = Uri(
+      scheme: 'sms',
+      path: number,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Future<void> sendEmail(String number) async {
+    final Uri launchUri = Uri(
+      scheme: 'mailto',
+      path: number,
+    );
+    await launchUrl(launchUri);
+  }
 }

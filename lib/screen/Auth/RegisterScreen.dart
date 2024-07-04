@@ -89,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const Center(
                     child: Image(
-                        image: AssetImage('assets/images/login.png'),
+                        image: AssetImage('assets/images/papa.png'),
                         fit: BoxFit.cover)),
                 SizedBox(
                   height: size.width * 0.1,
@@ -116,27 +116,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 color: Colors.grey[500]!.withOpacity(0.5),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: DropdownButton<String>(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                dropdownColor: kPrimary,
-                                style: kBodyText,
-                                value: stationValue,
-                                items: stations.data!
-                                    .map<DropdownMenuItem<String>>(
-                                        (Data value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value.id.toString(),
-                                    child: Text(
-                                        value.location ?? 'Unknown location',
-                                        style: kBodyText),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    stationValue = newValue!;
-                                  });
-                                },
+                              child: Row(
+                                children: [
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.0),
+                                    child: Icon(
+                                      Icons.church,
+                                      color: Colors.white,
+                                      size: 22,
+                                    ),
+                                  ),
+                                  DropdownButton<String>(
+                                    dropdownColor: kPrimary,
+                                    style: kBodyText,
+                                    value: stationValue,
+                                    items: stations.data!
+                                        .map<DropdownMenuItem<String>>(
+                                            (Data value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value.id.toString(),
+                                        child: Text(
+                                            value.location ??
+                                                'Unknown location',
+                                            style: kBodyText),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        stationValue = newValue!;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                           ),
