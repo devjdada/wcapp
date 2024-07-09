@@ -9,7 +9,8 @@ class HttpService {
   }
 
   late Dio _dio;
-  final String baseUrl = 'http://10.0.2.2:8000/api/';
+  // final String baseUrl = 'http://10.0.2.2:8000/api/';
+  final String baseUrl = 'https://echotronicsng.com/api/';
 
   HttpService._internal() {
     BaseOptions options = BaseOptions(

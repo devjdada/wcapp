@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/screen/profile/include/DiagonallyCutColoredImage.dart';
+import 'package:winners/shared/openDrawer.dart';
 import 'package:winners/shared/themes.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -134,20 +135,10 @@ class ProfileHeader extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
+        const Positioned(
           top: 26.0,
           left: 4.0,
-          child: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.menu),
-                color: Colors.white,
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
+          child: OpenDrawer(),
         ),
         Positioned(
           top: 26.0,

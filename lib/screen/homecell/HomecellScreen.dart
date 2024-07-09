@@ -7,6 +7,7 @@ import 'package:winners/schema/HomecellsSchema.dart';
 import 'package:winners/search/HomecellSearch.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/loader.dart';
+import 'package:winners/shared/openDrawer.dart';
 import 'package:winners/shared/themes.dart';
 
 class HomecellScreen extends StatefulWidget {
@@ -74,6 +75,7 @@ class _HomecellScreenState extends State<HomecellScreen> {
                     ),
                   ],
                   backgroundColor: Theme.of(context).colorScheme.primary,
+                  leading: const OpenDrawer(),
                   flexibleSpace: FlexibleSpaceBar(
                     title: const Text(
                       'Homecells',

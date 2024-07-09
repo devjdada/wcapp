@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:winners/api/GalleryApi.dart';
@@ -12,9 +13,13 @@ import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/TestimonySchema.dart';
 import 'package:winners/schema/YtSchema.dart';
 import 'package:winners/screen/Auth/LoginScreen.dart';
+import 'package:winners/screen/blogs/BlogsScreen.dart';
+import 'package:winners/screen/podcast/mp3_player.dart';
+import 'package:winners/screen/testimony/TestimoniesScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/data/AppStore.dart';
 import 'package:winners/shared/data/AppString.dart';
+import 'package:winners/shared/openDrawer.dart';
 import 'package:youtube_api/youtube_api.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -123,6 +128,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -130,6 +137,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
+          leading: const OpenDrawer(),
         ),
         drawer: const Drawer(
           child: AppDrawer(),
@@ -218,16 +226,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               ],
                                             ),
                                             onTap: () {
-                                              // Navigator.of(context).push(
-                                              //     MaterialPageRoute(
-                                              //         builder: (BuildContext
-                                              //                 context) =>
-                                              //             Mp3MsgScreen(),
-                                              //         settings:
-                                              //             const RouteSettings(
-                                              //                 name:
-                                              //                     'mp3_message',
-                                              //                 arguments: [])));
+                                              Get.to(Mp3PlayerScreen());
                                             },
                                           ),
                                         ],
@@ -535,11 +534,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 textAlign: TextAlign.end,
                               ),
                               onTap: () {
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (BuildContext context) =>
-                                //         TestimonyScreen(),
-                                //     settings: const RouteSettings(
-                                //         name: 'testimony', arguments: [])));
+                                Get.to(const TestimoniesScreen());
                               },
                             ),
                           )
@@ -553,23 +548,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                   children: testimonies.data!.map((e) {
-                                return Container(
-                                  margin: const EdgeInsets.only(right: 10.0),
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    image: DecorationImage(
-                                        image: NetworkImage(e.image.toString()),
-                                        fit: BoxFit.cover),
-                                  ),
+                                return InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                      margin:
+                                          const EdgeInsets.only(right: 10.0),
+                                      width: width * 0.56,
+                                      height: height * 0.18,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                e.image.toString()),
+                                            fit: BoxFit.cover),
+                                      ),
+                                      child: Positioned(
+                                        bottom: 0.0,
+                                        left: 0.0,
+                                        right: 0.0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            gradient: const LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color.fromARGB(
+                                                    90, 88, 221, 172),
+                                                Color.fromARGB(
+                                                    90, 126, 238, 197),
+                                              ],
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 5.0),
+                                          child: Text(
+                                            e.name.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14.0),
+                                          ),
+                                        ),
+                                      )),
                                 );
                               }).toList()),
                             ),
                       Row(
                         children: <Widget>[
                           const Expanded(
-                              child: Text("Gallery",
+                              child: Text("Blogs",
                                   style: TextStyle(fontSize: 16.0))),
                           Expanded(
                               child: InkWell(
@@ -579,11 +608,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               textAlign: TextAlign.end,
                             ),
                             onTap: () {
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (BuildContext context) =>
-                              //         const GalleryScreen(),
-                              //     settings: const RouteSettings(
-                              //         name: 'gallery', arguments: [])));
+                              Get.to(BlogsScreen());
                             },
                           ))
                         ],

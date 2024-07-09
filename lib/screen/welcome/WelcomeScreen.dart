@@ -45,6 +45,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       title: 'Caller Squard',
       subTitle: 'Join Caller Squard to followup invitte through phone call',
       imageUrl: 'assets/images/caller.png',
+      imageHeight: 200,
+      imageWidth: 200,
     ),
     Introduction(
       title: 'Family',

@@ -13,6 +13,7 @@ import 'package:winners/screen/contact/ContactDetalScreen.dart';
 import 'package:winners/screen/contact/NewReportScreen.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/loader.dart';
+import 'package:winners/shared/openDrawer.dart';
 import 'package:winners/shared/themes.dart';
 import 'package:winners/shared/widget/BackgroundImage.dart';
 import 'package:winners/shared/widget/TextInputFieldIcon.dart';
@@ -217,7 +218,9 @@ class _MyContactScreenState extends State<MyContactScreen> {
         child: AppDrawer(),
       ),
       body: loading == false
-          ? Center(child: Loader())
+          ? Center(
+              child: Loader(),
+            )
           : MyInvittees == null || MyInvittees.data == null
               ? const Center(
                   child: Text(
@@ -229,6 +232,7 @@ class _MyContactScreenState extends State<MyContactScreen> {
                   slivers: <Widget>[
                     SliverAppBar(
                       backgroundColor: Theme.of(context).colorScheme.primary,
+                      leading: const OpenDrawer(),
                       flexibleSpace: FlexibleSpaceBar(
                         title: const Text(
                           'Soul Wining',

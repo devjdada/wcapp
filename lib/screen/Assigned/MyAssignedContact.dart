@@ -8,6 +8,7 @@ import 'package:winners/schema/LogUserSchema.dart';
 import 'package:winners/schema/MyAssignedSchema.dart';
 import 'package:winners/shared/AppDrawer.dart';
 import 'package:winners/shared/loader.dart';
+import 'package:winners/shared/openDrawer.dart';
 import 'package:winners/shared/themes.dart';
 
 class MyAssignedContact extends StatefulWidget {
@@ -68,6 +69,7 @@ class _MyAssignedContactState extends State<MyAssignedContact> {
                       stretch: true,
                       pinned: true,
                       backgroundColor: Theme.of(context).primaryColor,
+                      leading: const OpenDrawer(),
                       actions: <Widget>[
                         IconButton(
                           icon: const Icon(Icons.search),
